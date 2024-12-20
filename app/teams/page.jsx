@@ -5,8 +5,19 @@ import { useRouter } from "next/navigation";
 import axios from "axios";
 import FiltersSidebar from "../../components/FiltersSidebar";
 import TeamCard from "../../components/TeamCard";
-import { Card, CardContent, CardHeader, CardTitle } from "../../@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "../../@/components/ui/card";
 import { Button } from "../../@/components/ui/button";
+import {
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from "../../@/components/ui/tabs";
 
 const TeamFinder = () => {
   const router = useRouter();
@@ -78,40 +89,55 @@ const TeamFinder = () => {
   }
 
   return (
-    <div className="mt-20 px-5 md:px-10 xl:px-[12%] min-h-[70vh] transition-all">
-      <h1 className="text-3xl ml-4 mb-14 font-semibold tracking-tight">
-        Team Finder
-      </h1>
+    <Tabs defaultValue="team_finder" className="w-full">
+      <TabsList className="grid w-[400px] mx-auto grid-cols-2 border border-zinc-200/20">
+        <TabsTrigger className="data-[state=active]:bg-white data-[state=active]:text-black" value="team_finder">Team Finder</TabsTrigger>
+        <TabsTrigger className="" value="my_teams">My Teams</TabsTrigger>
+      </TabsList>
+      <TabsContent value="team_finder" className="">
+        <div className="px-5 md:px-10 xl:px-[12%] min-h-[70vh] transition-all">
+          <h1 className="text-3xl ml-4 mb-14 font-semibold tracking-tight">
+            Team Finder
+          </h1>
 
-      <div className="mx-5 p-2 grid gap-5 grid-cols-1 lg:grid-cols-10 overflow-hidden transition-all">
-        <Card className="mt-5 lg:mt-0 lg:ml-5 col-span-1 lg:col-span-7 transition-all">
-          <CardHeader className="flex flex-col gap-5">
-            <CardTitle className="flex items-center justify-between">
-              <h2 className="text-2xl">Find Team</h2>
-              <Button onClick={() => router.push("/create/team")}>
-                Create Team
-              </Button>
-            </CardTitle>
-          </CardHeader>
+          <div className="mx-5 p-2 grid gap-5 grid-cols-1 lg:grid-cols-10 overflow-hidden transition-all">
+            <Card className="mt-5 lg:mt-0 lg:ml-5 col-span-1 lg:col-span-7 transition-all">
+              <CardHeader className="flex flex-col gap-5">
+                <CardTitle className="flex items-center justify-between">
+                  <h2 className="text-2xl">Find Team</h2>
+                  <Button onClick={() => router.push("/create/team")}>
+                    Create Team
+                  </Button>
+                </CardTitle>
+              </CardHeader>
 
-          <CardContent className="min-h-80 lg:h-full border-t pt-5 transition-all">
-            {filteredTeams.length > 0 ? (
-              filteredTeams.map((team, index) => (
-                <TeamCard key={index} team={team} />
-              ))
-            ) : (
-              <p>No teams found. Try creating one!</p>
-            )}
-          </CardContent>
-        </Card>
+              <CardContent className="min-h-80 lg:h-full border-t pt-5 transition-all">
+                {filteredTeams.length > 0 ? (
+                  filteredTeams.map((team, index) => (
+                    <TeamCard key={index} team={team} />
+                  ))
+                ) : (
+                  <p>No teams found. Try creating one!</p>
+                )}
+              </CardContent>
+            </Card>
 
-        <FiltersSidebar
-          filters={filters}
-          setFilters={setFilters}
-          onReset={handleResetFilters}
-        />
-      </div>
-    </div>
+            <FiltersSidebar
+              filters={filters}
+              setFilters={setFilters}
+              onReset={handleResetFilters}
+            />
+          </div>
+        </div>
+      </TabsContent>
+      <TabsContent value="my_teams">
+        <div className="px-5 md:px-10 xl:px-[12%] min-h-[70vh] transition-all">
+          <h1 className="text-3xl ml-4 mb-14 font-semibold tracking-tight">
+            My Teams
+          </h1>
+        </div>
+      </TabsContent>
+    </Tabs>
   );
 };
 

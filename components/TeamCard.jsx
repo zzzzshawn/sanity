@@ -1,18 +1,20 @@
+import Link from "next/link";
 import React from "react";
 
 const TeamCard = ({ team }) => {
+
   return (
     <div className="p-4 bg-slate-800 text-white mb-4 rounded-md">
       <div className="border-b-4 border-b-stone-600">
         <div className="flex justify-between items-center mb-5">
-          <div className="flex items-center">
+          <Link href={`/teams/${team._id}`} className="flex items-center">
             <img
               src={team.image || "https://via.placeholder.com/40"}
               alt={`${team.name} logo`}
               className="w-10 h-10 rounded-full mr-4"
             />
             <h3 className="text-xl">{team.teamname}</h3>
-          </div>
+          </Link>
           <button className="bg-transparent border-2 border-blue-800 px-4 py-2 rounded hidden md:block">
             Request to join
           </button>
