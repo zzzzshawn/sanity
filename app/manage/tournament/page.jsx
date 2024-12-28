@@ -62,9 +62,12 @@ export default function Page() {
 
     try {
       setLoading(true);
-      const response = await axios.post(`/api/tournaments/${selectedTournamentId}/structure`, {
-        structureData: { name: stageName }, // Send the new stage data
-      });
+      const response = await axios.post(
+        `/api/tournaments/${selectedTournamentId}/structure`,
+        {
+          structureData: { name: stageName }, // Send the new stage data
+        },
+      );
 
       console.log("Stage created:", response.data.tournament);
       setStageName(""); // Clear input after success
@@ -80,11 +83,14 @@ export default function Page() {
     if (!selectedTournamentId) return;
 
     try {
-      const response = await axios.put(`/api/tournaments/${selectedTournamentId}`, {
-        registrationData: {
-          enabled: true,
+      const response = await axios.put(
+        `/api/tournaments/${selectedTournamentId}`,
+        {
+          registrationData: {
+            enabled: true,
+          },
         },
-      });
+      );
 
       console.log("Registration enabled:", response.data.tournament);
       fetchTournamentDetails(selectedTournamentId); // Refresh details
@@ -188,6 +194,7 @@ export default function Page() {
               className="p-3 bg-green-400 rounded-md text-white"
               onClick={addParticipant}
               disabled={loading}
+              arial-label="add-participant-btn"
             >
               {loading ? "Adding..." : "+Add Participant"}
             </button>
@@ -215,6 +222,7 @@ export default function Page() {
               className="p-3 bg-green-400 rounded-md text-white"
               onClick={handleCreateStage}
               disabled={loading}
+              arial-label="create-new-stage-btn"
             >
               {loading ? "Creating..." : "+Create new stage"}
             </button>
@@ -232,6 +240,7 @@ export default function Page() {
               className="p-3 bg-blue-400 rounded-md text-white"
               onClick={handleEnableRegistration}
               disabled={loading}
+              arial-label="enable-registration-btn"
             >
               {loading ? "Enabling..." : "Enable Registration"}
             </button>

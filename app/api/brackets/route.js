@@ -1,48 +1,88 @@
-import dbConnect from '../../../lib/dbConnect';
-import Bracket from '../../../model/Bracket';
-import { NextResponse } from 'next/server';
-import Tournament from '../../../model/Tournament';
+import dbConnect from "../../../lib/dbConnect";
+import Bracket from "../../../model/Bracket";
+import { NextResponse } from "next/server";
+import Tournament from "../../../model/Tournament";
+import { z } from "zod";
+import { InMemoryDatabase } from "brackets-memory-db";
+import { BracketsManager } from "brackets-manager";
+
+const bracketSchema = z.object({
+  tournament_name: z.string().min(1),
+  format: z.enum(["single_elimination", "double_elimination"]),
+  consolationFinal: z.boolean().default(false),
+  grandFinalType: z.enum(["simple", "double"]),
+  teams: z.array(z.string().min(1)).min(4, "At least 4 teams are required"),
+});
 
 export async function POST(request) {
-    try {
-        await dbConnect();
+  const storage = new InMemoryDatabase();
+  const manager = new BracketsManager(storage);
 
-        const { tournamentId, bracketName, bracketImage, bracketData } = await request.json();
+  try {
+    await dbConnect();
+    const body = await request.json();
 
-        const newBracket = new Bracket({
-            tournamentId,
-            bracketName,
-            bracketImage,
-            bracketData
-        });
+    const validation = bracketSchema.safeParse(body);
 
-        await newBracket.save();
-
-        // Update the tournament with the new bracket
-        await Tournament.findByIdAndUpdate(tournamentId,
-            { $push: { brackets: newBracket._id } }
-        );
-
-        return NextResponse.json({
-            message: 'Bracket created and associated with tournament successfully',
-            id: newBracket._id
-        }, { status: 201 });
-    } catch (error) {
-        console.error('Error creating bracket:', error);
-        return NextResponse.json({
-            error: 'Internal Server Error',
-            details: error.message
-        }, { status: 500 });
+    if (!validation.success) {
+      return NextResponse.json(validation.error.format(), { status: 400 });
     }
+
+    console.log(validation.data);
+
+    const { tournament_name, format, consolationFinal, grandFinalType, teams } =
+      validation.data;
+
+    const tournamentId = crypto.randomUUID();
+
+    await manager.create.stage({
+      tournamentId,
+      name: tournament_name,
+      type: format,
+      seeding: teams,
+      settings: {
+        consolationFinal,
+        grandFinal: grandFinalType,
+      },
+    });
+
+    const newBracket = new Bracket({
+      ...(await manager.get.tournamentData(tournamentId)),
+      tournamentName: tournament_name,
+      format: format,
+    });
+
+    await newBracket.save();
+
+    // cleanup
+    await manager.delete.tournament(tournamentId);
+
+    return NextResponse.json(
+      { message: "Bracket created successfully", id: newBracket._id },
+      { status: 201 },
+    );
+  } catch (error) {
+    console.error("Error creating bracket:", error);
+    return NextResponse.json(
+      {
+        error: "Internal Server Error",
+        details: error.message,
+      },
+      { status: 500 },
+    );
+  }
 }
 
 export async function GET() {
-    try {
-        await dbConnect();
-        const brackets = await Bracket.find({}).sort({ createdAt: -1 });
-        return NextResponse.json(brackets);
-    } catch (error) {
-        console.error('Error fetching brackets:', error);
-        return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
-    }
+  try {
+    await dbConnect();
+    const brackets = await Bracket.find({}).sort({ createdAt: -1 });
+    return NextResponse.json(brackets);
+  } catch (error) {
+    console.error("Error fetching brackets:", error);
+    return NextResponse.json(
+      { error: "Internal Server Error" },
+      { status: 500 },
+    );
+  }
 }

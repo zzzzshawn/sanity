@@ -1,12 +1,15 @@
-import Head from 'next/head';
-import React from 'react';
+import Head from "next/head";
+import React from "react";
 
 interface VerificationEmailProps {
   username: string;
   otp: string;
 }
 
-export default function VerificationEmail({ username, otp }) {
+export default function VerificationEmailProps({
+  username,
+  otp,
+}: VerificationEmailProps) {
   return (
     <html lang="en" dir="ltr">
       <Head>
@@ -26,7 +29,10 @@ export default function VerificationEmail({ username, otp }) {
             <h2>Hello {username},</h2>
           </div>
           <div>
-            <p>Thank you for registering. Please use the following verification code to complete your registration:</p>
+            <p>
+              Thank you for registering. Please use the following verification
+              code to complete your registration:
+            </p>
           </div>
           <div>
             <p>{otp}</p>

@@ -7,7 +7,7 @@ const FiltersSidebar = ({ filters, setFilters, onReset }) => {
   };
 
   return (
-    <div className="p-4 rounded-lg col-span-1 lg:col-span-3 h-fit border shadow transition-all">
+    <div className="p-4 rounded-lg col-span-1 lg:col-span-3 h-fit border border-neutral-700 shadow transition-all">
       <form>
         <div className="flex justify-between items-center mb-4">
           <div className="text-xl font-semibold">Filters</div>
@@ -16,6 +16,7 @@ const FiltersSidebar = ({ filters, setFilters, onReset }) => {
             type="button"
             className="transition-all"
             onClick={onReset}
+            arial-label="reset-btn"
           >
             Reset
           </Button>
@@ -30,7 +31,7 @@ const FiltersSidebar = ({ filters, setFilters, onReset }) => {
             onChange={handleChange}
             className="w-full p-2 rounded-md bg-background  border"
           >
-            <option className="text-black"  value="" disabled>
+            <option className="text-black" value="" disabled>
               Select Game
             </option>
             <option className="text-black">BGMI</option>
@@ -78,7 +79,7 @@ const FiltersSidebar = ({ filters, setFilters, onReset }) => {
           </select>
         </div>
 
-        <Button type="button" className="w-full mt-5">
+        <Button type="button" className="w-full mt-5" arial-label="apply-btn">
           Apply
         </Button>
       </form>

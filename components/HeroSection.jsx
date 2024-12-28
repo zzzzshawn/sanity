@@ -4,6 +4,7 @@ import Link from "next/link";
 import { Button } from "./ui/button";
 import Image from "next/image";
 import { motion } from "framer-motion";
+import { ArrowRight } from "lucide-react";
 
 export default function HeroSection() {
   return (
@@ -14,9 +15,12 @@ export default function HeroSection() {
       transition={{ duration: 0.8, delay: 0.4 }}
     >
       <div className="text-center max-w-4xl mx-auto space-y-6">
-        <span className="inline-block px-4 py-1.5 bg-primary/10 text-primary rounded-full text-sm font-medium">
-          Discover new heights
-        </span>
+        <div className="flex items-center  gap-2 w-fit mx-auto px-4 py-1.5  rounded-full text-sm font-medium border border-neutral-700">
+          <p className="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
+            &#10024; Discover new heights{" "}
+          </p>
+          <ArrowRight className="size-4" />
+        </div>
 
         <h1 className="text-5xl md:text-6xl font-bold leading-tight">
           Level Up Your Esports Journey with{" "}
@@ -26,20 +30,25 @@ export default function HeroSection() {
         </h1>
 
         <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-          The Go-To Esports Platform at the intersection of esports and mental well-being
+          The Go-To Esports Platform at the intersection of esports and mental
+          well-being
         </p>
 
         <div className="flex items-center justify-center gap-4 pt-4">
-          <Button size="lg" className="bg-primary hover:bg-primary-hover">
+          <Button
+            size="lg"
+            className="bg-primary hover:bg-primary-hover"
+            arial-label="get-started-btn"
+          >
             Get Started
           </Button>
-          <Button size="lg" variant="outline">
+          <Button size="lg" variant="outline" arial-label="learn-more-btn">
             Learn More
           </Button>
         </div>
       </div>
 
-      <motion.div 
+      <motion.div
         className="mt-20"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
