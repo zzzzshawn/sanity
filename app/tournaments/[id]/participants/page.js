@@ -1,10 +1,10 @@
 "use client";
 
-import { parseParameter } from "next/dist/shared/lib/router/utils/route-regex";
+import { useParams } from "next/navigation";
 import ParticipantsSection from "../../../../components/ParticipantsSection";
 
 const ParticipantsPage = () => {
-  const id = parseParameter(params.id);
+  const params = useParams();
   return (
     <div className="px-[5%] xl:px-[12%] min-h-[70vh] transition-all">
       {/* Participants */}
@@ -15,7 +15,7 @@ const ParticipantsPage = () => {
         </div>
         {/* participants */}
         <div className="mt-10 flex flex-col gap-5">
-          <ParticipantsSection id={id} />
+          <ParticipantsSection id={params.id} />
         </div>
       </div>
     </div>
