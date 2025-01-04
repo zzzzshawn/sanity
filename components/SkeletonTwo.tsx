@@ -17,7 +17,7 @@ export const SkeletonTwo = () => {
     // other images...
   ];
 
-  const [rotationValues, setRotationValues] = useState([]);
+  const [rotationValues, setRotationValues] = useState<number[]>([]);
 
   useEffect(() => {
     // Generate random rotation values on the client
