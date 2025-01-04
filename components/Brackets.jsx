@@ -41,10 +41,9 @@ function Bracket({ id }) {
   useEffect(() => {
     // Ensure render is called only once when id changes
     render(id);
-
   }, [id]);
-  
-// Add id as a dependency
+
+  // Add id as a dependency
 
   return (
     <>
