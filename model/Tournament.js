@@ -22,7 +22,11 @@ const TournamentSchema = new Schema(
     results: [Schema.Types.Mixed],
     teamsRegistered: [
       {
-        id: { type: mongoose.Schema.Types.ObjectId, required: true },
+        id: {
+          type: mongoose.Schema.Types.ObjectId,
+          required: true,
+          ref: "TeamModel",
+        },
         name: { type: String, required: true },
         members: [{ type: String }],
         email: { type: String, required: true, lowercase: true, trim: true },
