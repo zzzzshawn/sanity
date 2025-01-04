@@ -8,7 +8,6 @@ import NewBracket from "../../../components/NewBracket";
 
 import { PacmanLoader } from "react-spinners";
 
-
 const BracketTemplate = () => {
   const [bracket, setBracket] = useState(null);
   const [loading, setLoading] = useState(true);
