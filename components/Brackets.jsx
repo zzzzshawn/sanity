@@ -6,9 +6,10 @@ import "brackets-viewer/dist/brackets-viewer.min.css";
 import "./styles/bracket.css";
 
 async function render(id) {
-  //refer to Template.md file to spin up this path.
+  // Fetching data from the API
   const data = await fetch(`/api/brackets/${id}`).then((res) => res.json());
 
+  // Check if window is defined before accessing it
   if (typeof window !== "undefined") {
     window.bracketsViewer.setParticipantImages(
       data.participant.map((participant) => ({
@@ -38,8 +39,12 @@ async function render(id) {
 
 function Bracket({ id }) {
   useEffect(() => {
+    // Ensure render is called only once when id changes
     render(id);
+
   }, [id]);
+  
+// Add id as a dependency
 
   return (
     <>
