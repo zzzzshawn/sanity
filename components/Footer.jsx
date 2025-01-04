@@ -31,7 +31,7 @@ export const socialLinks = [
 export default function Footer() {
   return (
     <>
-      <div className="grid grid-cols-1 px-10 mt-40 pt-10 md:px-[10%] lg:px-[12%] border-t transition-all">
+      <div className="grid grid-cols-1 px-10 mt-20 pt-10 md:px-[10%] lg:px-[12%] border-t transition-all">
         <div className="flex flex-col md:flex-row gap-20 justify-between transition-all">
           {/* main sec */}
           <div className="flex flex-col">
@@ -104,7 +104,7 @@ export default function Footer() {
           </div>
         </div>
 
-        <div className="border-t mt-20 py-10 text-xs md:text-sm text-center text-gray-500 transition-all">
+        <div className="border-t mt-10 py-10 text-xs md:text-sm text-center text-gray-500 transition-all">
           Built and maintained by Sanity Gaming - © 2024
         </div>
       </div>

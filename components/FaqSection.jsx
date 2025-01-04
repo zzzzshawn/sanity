@@ -1,9 +1,8 @@
 "use client";
 
 import React, { useRef, useState } from "react";
-import { FaPlus, FaMinus, FaArrowUp19 } from "react-icons/fa6";
+import { FaPlus, FaMinus } from "react-icons/fa6";
 import { motion } from "framer-motion";
-import { Button } from "./ui/button";
 
 export default function FaqSection() {
   return (
@@ -13,7 +12,7 @@ export default function FaqSection() {
         viewport={{ once: true }}
         initial={{ opacity: 0, y: 30 }}
         whileInView={{ opacity: 1, y: 0 }}
-        transition={{ type: "easIn", duration: 0.5, delay: 0.6 }}
+        transition={{ type: "easIn", duration: 0.5, delay: 0.2 }}
       >
         <div className="text-center max-w-3xl mx-auto mb-12">
           <h2 className="text-4xl font-bold mb-4 bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
