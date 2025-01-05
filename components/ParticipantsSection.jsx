@@ -144,7 +144,7 @@ const ParticipantsSection = ({ id }) => {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         {filteredParticipants.map((team) => (
           <Card
-            key={team?.id || Math.random()}
+            key={team?.id}
             className="hover:shadow-lg transition-shadow duration-300"
           >
             <CardHeader className="pb-2">
