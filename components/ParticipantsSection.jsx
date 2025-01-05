@@ -1,16 +1,25 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { AlertCircle, Search, Users, ShieldAlert } from "lucide-react";
+import React, { useState, useEffect } from "react";
+import {
+  AlertCircle,
+  Search,
+  Users,
+  ShieldAlert,
+  User,
+  Globe,
+  Trophy,
+} from "lucide-react";
 import { Alert, AlertDescription } from "../@/components/ui/alert";
 import { Input } from "../@/components/ui/input";
+import { Badge } from "../@/components/ui/badge";
+import { Card, CardHeader, CardContent } from "../@/components/ui/card";
 
 const ParticipantsSection = ({ id }) => {
   const [participants, setParticipants] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
-  const [totalCount, setTotalCount] = useState(0);
   const [tournamentExists, setTournamentExists] = useState(true);
 
   useEffect(() => {
@@ -18,7 +27,7 @@ const ParticipantsSection = ({ id }) => {
       try {
         const response = await fetch(`/api/tournaments/${id}/participants`);
         const data = await response.json();
-        console.log(data);
+
         if (response.status === 404) {
           setTournamentExists(false);
           setError("Tournament not found");
@@ -29,39 +38,41 @@ const ParticipantsSection = ({ id }) => {
           throw new Error(data.error || "Failed to fetch participants");
         }
 
-        setParticipants(data);
-        setTotalCount(data.length);
+        setParticipants(Array.isArray(data) ? data : []);
       } catch (err) {
         setError(err.message);
+        setParticipants([]); // Ensure participants is always an array
       } finally {
         setLoading(false);
       }
     };
 
-    fetchParticipants();
+    if (id) {
+      fetchParticipants();
+    }
   }, [id]);
 
-  const filteredParticipants = participants.filter(
-    (team) =>
-      team.players?.some((player) =>
-        player.toLowerCase().includes(searchTerm.toLowerCase()),
+  const filteredParticipants = participants.filter((team) => {
+    const searchLower = searchTerm.toLowerCase();
+    return (
+      (team?.name || "").toLowerCase().includes(searchLower) ||
+      (team?.players || []).some((player) =>
+        (player || "").toLowerCase().includes(searchLower),
       ) ||
-      (team.rank &&
-        team.rank.toLowerCase().includes(searchTerm.toLowerCase())) ||
-      (team.language &&
-        team.language.toLowerCase().includes(searchTerm.toLowerCase())),
-  );
+      (team?.rank || "").toLowerCase().includes(searchLower) ||
+      (team?.language || "").toLowerCase().includes(searchLower) ||
+      (team?.participantType || "").toLowerCase().includes(searchLower)
+    );
+  });
 
-  // Loading state
   if (loading) {
     return (
       <div className="flex items-center justify-center h-48">
-        <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-primary"></div>
+        <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-primary" />
       </div>
     );
   }
 
-  // Tournament not found state
   if (!tournamentExists) {
     return (
       <div className="flex flex-col items-center justify-center h-48 space-y-4">
@@ -77,7 +88,6 @@ const ParticipantsSection = ({ id }) => {
     );
   }
 
-  // Error state
   if (error) {
     return (
       <Alert variant="destructive">
@@ -89,29 +99,29 @@ const ParticipantsSection = ({ id }) => {
 
   return (
     <div className="space-y-6">
-      {/* Search and Stats Section */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div className="relative w-full sm:w-64">
           <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
           <Input
             type="text"
-            placeholder="Search participants..."
+            placeholder="Search teams..."
             className="pl-8"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           />
         </div>
+
         <div className="flex items-center gap-4 text-sm text-muted-foreground">
           <div className="flex items-center gap-2">
             <Users className="h-4 w-4" />
-            <span>Total Teams: {totalCount}</span>
+            <span>Registered Teams: {participants?.length || 0}</span>
           </div>
           <div className="flex items-center gap-2">
-            <Users className="h-4 w-4" />
+            <User className="h-4 w-4" />
             <span>
-              Total Team Members:{" "}
+              Total Players:{" "}
               {participants.reduce(
-                (acc, team) => acc + (team.players?.length || 0),
+                (acc, team) => acc + ((team?.players || []).length || 0),
                 0,
               )}
             </span>
@@ -119,84 +129,78 @@ const ParticipantsSection = ({ id }) => {
         </div>
       </div>
 
-      {/* No Results Message */}
       {filteredParticipants.length === 0 && (
         <div className="text-center py-8">
           {searchTerm ? (
             <p className="text-muted-foreground">
-              No participants found matching &quot;{searchTerm}&quot;
+              No teams found matching &quot;{searchTerm}&quot;
             </p>
           ) : (
-            <p className="text-muted-foreground">
-              No participants registered yet.
-            </p>
+            <p className="text-muted-foreground">No teams registered yet.</p>
           )}
         </div>
       )}
 
-      {/* Participants Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         {filteredParticipants.map((team) => (
-          <div
-            key={team.id}
-            className="bg-card p-4 rounded-lg shadow hover:shadow-lg transition-shadow duration-300 border border-border hover:border-primary"
+          <Card
+            key={team?.id || Math.random()}
+            className="hover:shadow-lg transition-shadow duration-300"
           >
-            <div className="flex justify-between items-start mb-4">
-              <div>
-                <h3 className="text-lg font-semibold">{team.name}</h3>
-              </div>
-              <div className="flex flex-col items-end gap-1">
-                <span className="px-2 py-1 text-xs rounded bg-primary/10 text-primary">
-                  {team.selectedPlatform}
-                </span>
-                {team.rank && (
-                  <span className="text-xs text-muted-foreground">
-                    Rank: {team.rank}
-                  </span>
+            <CardHeader className="pb-2">
+              <div className="flex justify-between items-start">
+                <div>
+                  <h3 className="font-semibold">
+                    {team?.name || "Unnamed Team"}
+                  </h3>
+                  <p className="text-sm text-muted-foreground">
+                    {team?.participantType || "Not specified"}
+                  </p>
+                </div>
+                {team?.selectedPlatform && (
+                  <Badge variant="secondary">{team.selectedPlatform}</Badge>
                 )}
               </div>
-            </div>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-4">
+                <div className="flex gap-2 flex-wrap">
+                  {team?.rank && (
+                    <div className="flex items-center gap-1 text-xs">
+                      <Trophy className="h-3 w-3" />
+                      <span>{team.rank}</span>
+                    </div>
+                  )}
+                  {team?.language && (
+                    <div className="flex items-center gap-1 text-xs">
+                      <Globe className="h-3 w-3" />
+                      <span>{team.language}</span>
+                    </div>
+                  )}
+                </div>
 
-            {/* Team Members Section */}
-            <div className="mb-4">
-              <h4 className="text-sm font-medium mb-2">
-                Team Members:{" "}
-                <span className="text-muted-foreground">
-                  ({team.players?.length || 0})
-                </span>
-              </h4>
-              {team.players && team.players.length > 0 ? (
-                <ul className="text-sm space-y-1">
-                  {team.players.map((player, index) => (
-                    <li
-                      key={index}
-                      className="text-muted-foreground flex items-center gap-2"
-                    >
-                      <span className="truncate">{player}</span>
-                    </li>
-                  ))}
-                </ul>
-              ) : (
-                <p className="text-sm text-muted-foreground">
-                  No members added yet.
-                </p>
-              )}
-            </div>
-
-            {/* Additional Details */}
-            <div className="mt-4 pt-3 border-t border-border">
-              <div className="flex justify-between items-center">
-                <span className="text-xs text-muted-foreground">
-                  {team.participantType}
-                </span>
-                {team.language && (
-                  <span className="text-xs text-muted-foreground">
-                    Language: {team.language}
-                  </span>
-                )}
+                <div className="space-y-2">
+                  <h4 className="text-sm font-medium flex items-center gap-2">
+                    <Users className="h-4 w-4" />
+                    Team Members ({(team?.players || []).length})
+                  </h4>
+                  <div className="grid grid-cols-2 gap-2">
+                    {(team?.players || []).map((player, index) => (
+                      <div
+                        key={index}
+                        className="text-sm text-muted-foreground flex items-center gap-1"
+                      >
+                        <User className="h-3 w-3" />
+                        <span className="truncate">
+                          {player || "Unknown Player"}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
               </div>
-            </div>
-          </div>
+            </CardContent>
+          </Card>
         ))}
       </div>
     </div>
