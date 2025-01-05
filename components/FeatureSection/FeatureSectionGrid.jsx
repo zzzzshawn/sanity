@@ -41,7 +41,7 @@ export default function FeaturesSectionGrid() {
   return (
     <div className="relative z-20 pt-5 pb-5 lg:py-20 max-w-6xl mx-auto">
       <div className="px-8">
-        <h4 className="text-3xl lg:text-5xl lg:leading-tight max-w-5xl mx-auto text-center tracking-tight font-medium text-white">
+        <h4 className="text-3xl lg:text-5xl lg:leading-tight max-w-5xl mx-auto text-center tracking-tight font-medium">
           Unlike any other Esports platform
         </h4>
 
@@ -55,9 +55,7 @@ export default function FeaturesSectionGrid() {
         <div className="grid grid-cols-1 lg:grid-cols-6 mt-12 border rounded-md">
           {features.map((feature) => (
             <FeatureCard key={feature.title} className={feature.className}>
-              <FeatureTitle className="text-white">
-                {feature.title}
-              </FeatureTitle>
+              <FeatureTitle>{feature.title}</FeatureTitle>
               <FeatureDescription>{feature.description}</FeatureDescription>
               <div className=" h-full w-full ">{feature.skeleton}</div>
             </FeatureCard>
@@ -78,7 +76,7 @@ const FeatureCard = ({ children, className }) => {
 
 const FeatureTitle = ({ children }) => {
   return (
-    <p className=" max-w-5xl mx-auto text-left tracking-tight text-black text-xl md:text-2xl md:leading-snug">
+    <p className=" max-w-5xl mx-auto text-left tracking-tight text-xl md:text-2xl md:leading-snug">
       {children}
     </p>
   );
@@ -89,7 +87,7 @@ const FeatureDescription = ({ children }) => {
     <p
       className={cn(
         "text-sm md:text-base  max-w-4xl text-left mx-auto",
-        "text-neutral-500 text-center font-normal",
+        " text-center font-normal text-neutral-700 dark:text-gray-400",
         "text-left max-w-sm mx-0 md:text-sm my-2",
       )}
     >
