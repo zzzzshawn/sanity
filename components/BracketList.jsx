@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import { PacmanLoader } from "react-spinners";
 
 const BracketList = () => {
   const [brackets, setBrackets] = useState([]);
@@ -30,14 +31,22 @@ const BracketList = () => {
     fetchBrackets();
   }, []);
 
-  if (isLoading) return <div className="pt-3">Loading brackets...</div>;
+  console.log(brackets);
+
+  if (isLoading)
+    return (
+      <div className="flex w-full h-screen justify-center items-center">
+        <PacmanLoader color="white" />
+      </div>
+    );
   if (error) return <div className="pt-3">Error: {error}</div>;
 
   return (
     <div className="mt-8 px-4">
-      <h2 className="text-2xl font-bold mb-4">Existing Brackets</h2>
       {brackets.length === 0 ? (
-        <p>No brackets found...</p>
+        <p className="w-full h-full flex justify-center items-center mt-16">
+          No brackets found...
+        </p>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {brackets.map((bracket) => (

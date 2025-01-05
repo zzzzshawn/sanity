@@ -1,4 +1,5 @@
 import dbConnect from "../../../lib/dbConnect";
+import mongoose from "mongoose";
 import Bracket from "../../../model/Bracket";
 import { TeamModel } from "../../../model/Team";
 import { NextResponse } from "next/server";
@@ -16,6 +17,7 @@ const bracketSchema = z.object({
   grandFinalType: z.enum(["simple", "double"]),
   teams: z.array(z.string().min(1)).min(4, "At least 4 teams are required"),
 });
+
 export async function POST(request) {
   const storage = new InMemoryDatabase();
   const manager = new BracketsManager(storage);
@@ -23,7 +25,6 @@ export async function POST(request) {
   try {
     await dbConnect();
     const body = await request.json();
-
     const validation = bracketSchema.safeParse(body);
 
     if (!validation.success) {
@@ -33,7 +34,7 @@ export async function POST(request) {
     const { tournament_name, format, consolationFinal, grandFinalType, teams } =
       validation.data;
 
-    const tournamentId = crypto.randomUUID();
+    const tournamentId = new mongoose.Types.ObjectId();
 
     await manager.create.stage({
       tournamentId,
@@ -46,11 +47,29 @@ export async function POST(request) {
       },
     });
 
+    const participants = teams.map((team, index) => ({
+      id: new mongoose.Types.ObjectId(),
+      name: team,
+      tournament_id: tournamentId,
+    }));
+
+    const updatedStage = storage.data.stage.map((stage) => ({
+      ...stage,
+      id: new mongoose.Types.ObjectId(),
+      tournament_id: tournamentId,
+    }));
+
     const newBracket = new Bracket({
-      ...(await manager.get.tournamentData(tournamentId)),
       tournamentName: tournament_name,
       format: format,
+      participant: participants,
+      stage: updatedStage,
+      round: storage.data.round,
+      group: storage.data.group,
+      match: storage.data.match,
     });
+
+    // console.log(newBracket);
 
     await newBracket.save();
 
