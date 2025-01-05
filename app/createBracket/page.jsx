@@ -37,7 +37,7 @@ const bracketSchema = z.object({
 });
 
 const teamSchema = z.object({
-  teams: z.array(z.string().min(1)).min(4, "At least 4 teams are required"),
+  teams: z.array(z.string().min(1)),
 });
 
 const storage = new InMemoryDatabase();
@@ -68,17 +68,24 @@ export default function Page() {
     },
   });
 
-  async function onBracketSubmit(values) {
+  function onBracketSubmit(values) {
     setBracketInfo(values);
     setBracketCreated(true);
   }
 
-  async function onTeamSubmit(values) {
-    if (
-      values.teams.length < 2 ||
-      (values.teams.length & (values.teams.length - 1)) !== 0
-    ) {
+  function onTeamSubmit(values) {
+    if (values.teams.length < 4) {
+      toast.error("Please enter at least 4 team names.");
+      return;
+    }
+    if ((values.teams.length & (values.teams.length - 1)) !== 0) {
       toast.error("Number of teams must be a power of 2 (e.g. 4, 8, 16, etc.)");
+      return;
+    }
+
+    const uniqueTeams = new Set(values.teams);
+    if (uniqueTeams.size !== values.teams.length) {
+      toast.error("Team names must be unique.");
       return;
     }
 
@@ -87,9 +94,10 @@ export default function Page() {
 
     console.log("Bracket Info", JSON.stringify(info, null, 2));
 
-    setShowBrackets(true);
+    if (!showBrackets) {
+      setShowBrackets(true);
+    }
 
-    await rendering();
     toast.success("Bracket created successfully");
   }
 
@@ -116,6 +124,12 @@ export default function Page() {
     }
   }
 
+  async function removeBracket() {
+    storage.reset();
+    manager.reset;
+    setShowBrackets(false);
+  }
+
   async function rerendering() {
     if (!isBracketsViewerReady || !stageData) return;
 
@@ -123,21 +137,18 @@ export default function Page() {
       const bracketsViewerNode = document.querySelector(".brackets-viewer");
       bracketsViewerNode?.replaceChildren();
 
-      try {
-        window.bracketsViewer.onMatchClicked = async (match) => {
-          console.log("A match was clicked", match);
-
+      window.bracketsViewer.onMatchClicked = async (match) => {
+        try {
           await manager.update.match({
             id: match.id,
             opponent1: { score: 5 },
             opponent2: { score: 7, result: "win" },
           });
-          const tourneyData2 = await manager.get.currentMatches(0);
-          const tourneyData = await manager.get.stageData(0);
-          setStageData(tourneyData);
-          console.log("A tourney", tourneyData2);
-        };
-      } catch (error) {}
+        } catch (error) {}
+        const tourneyData2 = await manager.get.currentMatches(0);
+        const tourneyData = await manager.get.stageData(0);
+        setStageData(tourneyData);
+      };
 
       if (stageData.participant) {
         window.bracketsViewer.setParticipantImages(
@@ -191,6 +202,13 @@ export default function Page() {
       rerendering();
     }
   }, [isBracketsViewerReady, stageData]);
+
+  const removeParticipant = (index) => {
+    const updatedTeams = teamForm
+      .getValues("teams")
+      .filter((_, i) => i !== index);
+    teamForm.setValue("teams", updatedTeams);
+  };
 
   return (
     <div>
@@ -321,15 +339,26 @@ export default function Page() {
                   name={`teams.${index}`}
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel className="text-base">
-                        Team {index + 1}
-                      </FormLabel>
-                      <FormControl>
-                        <Input
-                          {...field}
-                          placeholder={`Team ${index + 1} Name`}
-                        />
-                      </FormControl>
+                      <div className="flex items-center space-x-4">
+                        <div>
+                          <FormLabel className="text-base">
+                            Team {index + 1}
+                          </FormLabel>
+                        </div>
+                        <FormControl>
+                          <Input
+                            {...field}
+                            placeholder={`Team ${index + 1} Name`}
+                            className="w-[80%]"
+                          />
+                        </FormControl>
+                        <Button
+                          type="button"
+                          onClick={() => removeParticipant(index)}
+                        >
+                          Remove
+                        </Button>
+                      </div>
                     </FormItem>
                   )}
                 />
@@ -344,10 +373,10 @@ export default function Page() {
               >
                 Add Another Team
               </Button>
-              <div>
+              <div className="flex justify-center">
                 <Button
                   type="submit"
-                  disabled={teamForm.formState.isSubmitting}
+                  disabled={teamForm.formState.isSubmitting || showBrackets}
                   arial-label="submit-team-btn"
                 >
                   Submit Teams
@@ -359,6 +388,9 @@ export default function Page() {
       </div>
       {showBrackets ? (
         <div className="mt-8 w-[80%] mx-auto">
+          <Button onClick={removeBracket} className="mb-1">
+            Clear
+          </Button>
           <div className="brackets-viewer custom"></div>
         </div>
       ) : null}
