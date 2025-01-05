@@ -1,7 +1,6 @@
-// app/api/tournaments/[id]/participants/route.js
 import { NextResponse } from "next/server";
-import dbConnect from "../../../../../lib/dbConnect"; // Assuming you have this utility
-import Tournament from "../../../../../model/Tournament"; // Your Tournament model
+import dbConnect from "../../../../../lib/dbConnect";
+import Tournament from "../../../../../model/Tournament";
 import { TeamModel } from "../../../../../model/Team";
 import UserModel from "../../../../../model/User";
 
@@ -30,10 +29,9 @@ export async function GET(request, { params }) {
       );
     }
 
-    // Safely transform the data with optional chaining and fallback values
     const enrichedParticipants = (tournament.teamsRegistered || []).map(
       (team) => {
-        const teamDetails = team?.id || {}; // Fallback to empty object if id is null
+        const teamDetails = team?.id || {};
         return {
           id: teamDetails._id || team._id || "unknown",
           name: team?.name || "Unnamed Team",
