@@ -3,7 +3,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
-import { signIn } from "next-auth/react";
+import { signIn, useSession } from "next-auth/react";
 import {
   Form,
   FormField,
@@ -16,7 +16,7 @@ import { Input } from "../../../@/components/ui/input";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { signInSchema } from "../../../model/Schema/signInSchema";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Card,
   CardContent,
@@ -47,25 +47,39 @@ export default function SignInForm() {
   const onSubmit = async (data) => {
     setIsLoading(true);
     try {
-      const response = await axios.post("/api/sign-in", data);
-      router.push("/dashboard");
-      toast.success(response.data.message);
+      const response = await signIn("credentials", {
+        identifier: data.identifier,
+        password: data.password,
+        redirect: false,
+      });
+
+      if (response?.error) {
+        toast.error(response.error);
+      } else {
+        router.push("/dashboard");
+        toast.success(response.data.message);
+      }
     } catch (error) {
-      toast.error(
-        error.response.data?.message || "An error occurred, try again",
-      );
+      toast.error("An error occurred, try again");
     } finally {
       setIsLoading(false);
     }
   };
 
   const handleGoogleSignIn = async () => {
-    await signIn("google", { callbackUrl: "/" });
+    await signIn("google", { callbackUrl: "/dashboard" });
   };
 
   const handleDiscordSignIn = async () => {
-    await signIn("discord", { callbackUrl: "/" });
+    await signIn("discord", { callbackUrl: "/dashboard" });
   };
+  const { data: session, status } = useSession();
+
+  useEffect(() => {
+    if (status === "authenticated") {
+      router.push("/dashboard");
+    }
+  }, [status, router]);
 
   return (
     <div>
