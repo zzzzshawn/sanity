@@ -41,7 +41,7 @@ const ParticipantsSection = ({ id }) => {
         setParticipants(Array.isArray(data) ? data : []);
       } catch (err) {
         setError(err.message);
-        setParticipants([]); // Ensure participants is always an array
+        setParticipants([]);
       } finally {
         setLoading(false);
       }
