@@ -1,4 +1,4 @@
-"use client";;
+"use client";
 import React, { useId } from "react";
 import { useEffect, useState } from "react";
 import Particles, { initParticlesEngine } from "@tsparticles/react";
@@ -40,7 +40,7 @@ export const SparklesCore = (props) => {
 
   const generatedId = useId();
   return (
-    (<motion.div animate={controls} className={cn("opacity-0", className)}>
+    <motion.div animate={controls} className={cn("opacity-0", className)}>
       {init && (
         <Particles
           id={id || generatedId}
@@ -414,8 +414,9 @@ export const SparklesCore = (props) => {
               },
             },
             detectRetina: true,
-          }} />
+          }}
+        />
       )}
-    </motion.div>)
+    </motion.div>
   );
 };

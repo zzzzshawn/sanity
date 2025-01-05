@@ -1,10 +1,12 @@
 import { fontFamily } from "tailwindcss/defaultTheme";
 
-import flattenColorPalette from 'tailwindcss/lib/util/flattenColorPalette';
+import flattenColorPalette from "tailwindcss/lib/util/flattenColorPalette";
 
 function addVariablesForColors({ addBase, theme }) {
   let allColors = flattenColorPalette(theme("colors"));
-  let newVars = Object.fromEntries(Object.entries(allColors).map(([key, val]) => [`--${key}`, val]));
+  let newVars = Object.fromEntries(
+    Object.entries(allColors).map(([key, val]) => [`--${key}`, val]),
+  );
 
   addBase({
     ":root": newVars,
@@ -86,7 +88,7 @@ module.exports = {
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
-        "aurora": "aurora 60s linear infinite",
+        aurora: "aurora 60s linear infinite",
       },
     },
   },

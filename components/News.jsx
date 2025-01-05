@@ -18,8 +18,10 @@ const News = () => {
     const fetchNews = async (category, setter) => {
       try {
         setIsLoading(true); // Start loading
-        const response = await axios.get(`https://gnews.io/api/v4/search?q=${category}&lang=en&country=us&max=10&apikey=81a4b76d35bd5ea98535a29f90daa9fa`);
-        
+        const response = await axios.get(
+          `https://gnews.io/api/v4/search?q=${category}&lang=en&country=us&max=10&apikey=81a4b76d35bd5ea98535a29f90daa9fa`,
+        );
+
         // Check if response is successful
         if (response.status === 200) {
           const articlesWithImages = response.data.articles.filter(
@@ -35,12 +37,11 @@ const News = () => {
         setIsLoading(false); // Always stop loading, regardless of success or error
       }
     };
-  
+
     fetchNews("Gaming", setLatestNews);
     fetchNews("Esports", setEsportsNews);
     fetchNews("Gaming News", setGamingNews);
   }, []);
-  
 
   const sliderRefs = {
     latestNews: useRef(null),
