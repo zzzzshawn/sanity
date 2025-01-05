@@ -159,7 +159,9 @@ const ParticipantsSection = ({ id }) => {
                   </p>
                 </div>
                 {team?.selectedPlatform && (
-                  <Badge variant="secondary">{team.selectedPlatform}</Badge>
+                  <Badge variant="default">
+                    <div className="px-3 py-1">{team.selectedPlatform} </div>
+                  </Badge>
                 )}
               </div>
             </CardHeader>
