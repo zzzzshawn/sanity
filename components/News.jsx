@@ -3,7 +3,6 @@ import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import axiosRetry from "axios-retry";
 import NewsItem from "./NewsItem";
-import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 import { PacmanLoader } from "react-spinners";
 
 const News = () => {
@@ -18,24 +17,30 @@ const News = () => {
   useEffect(() => {
     const fetchNews = async (category, setter) => {
       try {
-        setIsLoading(true);
-        const response = await axios.get(
-          `https://gnews.io/api/v4/search?q=${category}&lang=en&country=us&max=10&apikey=81a4b76d35bd5ea98535a29f90daa9fa`,
-        );
-        const articlesWithImages = response.data.articles.filter(
-          (article) => article.image,
-        );
-        setter(articlesWithImages);
-        setIsLoading(false);
+        setIsLoading(true); // Start loading
+        const response = await axios.get(`https://gnews.io/api/v4/search?q=${category}&lang=en&country=us&max=10&apikey=81a4b76d35bd5ea98535a29f90daa9fa`);
+        
+        // Check if response is successful
+        if (response.status === 200) {
+          const articlesWithImages = response.data.articles.filter(
+            (article) => article.image,
+          );
+          setter(articlesWithImages);
+        } else {
+          console.error(`Error fetching ${category} news: ${response.status}`);
+        }
       } catch (error) {
         console.error(`Error fetching ${category} news:`, error);
+      } finally {
+        setIsLoading(false); // Always stop loading, regardless of success or error
       }
     };
-
+  
     fetchNews("Gaming", setLatestNews);
     fetchNews("Esports", setEsportsNews);
     fetchNews("Gaming News", setGamingNews);
   }, []);
+  
 
   const sliderRefs = {
     latestNews: useRef(null),

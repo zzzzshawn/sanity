@@ -1,10 +1,19 @@
 import React from "react";
 import News from "../../components/News";
+import { Cover } from "../../@/components/ui/cover";
 
 const page = async () => {
   return (
     <div className="flex flex-col justify-center items-center ">
-      <div className="bg-cover mb-5 bg-center bg-[url(https://im.indiatimes.in/facebook/2019/Oct/mobile_gaming_1570096408.jpg)]  w-5/6 rounded-sm flex flex-col justify-center items-center h-96 py-8 px-4 "></div>
+      <div className="min-h-[240px] w-full flex flex-col justify-center items-center px-4 mt-10 pb-10">
+
+      <h1 className="text-4xl md:text-4xl lg:text-6xl font-semibold max-w-7xl mx-auto text-center mt-6 relative z-20 pt-6 bg-clip-text text-transparent bg-gradient-to-b from-neutral-800 via-neutral-700 to-neutral-700 dark:from-neutral-800 dark:via-white dark:to-white">
+      Discover the Hottest News  <br />
+        <span className=" bg-clip-text bg-gradient-to-r from-[#4F46E5] to-[#E114E5]">
+        and Insights Fast! <br />
+        </span>
+        </h1 >
+      </div>
       <News />
     </div>
   );
