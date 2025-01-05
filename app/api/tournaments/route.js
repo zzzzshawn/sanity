@@ -1,8 +1,6 @@
 import { NextResponse } from "next/server";
 import dbConnect from "../../../lib/dbConnect";
 import Tournament from "../../../model/Tournament";
-import Games from "../../../model/Games";
-import Organizer from "../../../model/Organizer";
 import { prefetchTournaments } from "../../../lib/prefetchTournaments";
 
 export async function GET(request) {

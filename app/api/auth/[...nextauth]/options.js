@@ -1,4 +1,3 @@
-const { NextAuthOptions } = require("next-auth");
 const GoogleProvider = require("next-auth/providers/google").default;
 const DiscordProvider = require("next-auth/providers/discord").default;
 const bcrypt = require("bcryptjs");
@@ -6,10 +5,10 @@ const UserModel = require("../../../../model/User").default;
 const dbConnect = require("../../../../lib/dbConnect");
 const CredentialsProvider = require("next-auth/providers/credentials").default;
 
-// Add the bypass credentials
+// bypass credentials
 const bypassCredentials = {
   email: "test@gmail.com",
-  password: "Gkjdfnjg$3",
+  password: "test123",
 };
 
 const authOptions = {
