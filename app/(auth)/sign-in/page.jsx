@@ -2,7 +2,8 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { signIn } from "next-auth/react";
+import * as z from "zod";
+import { signIn, useSession } from "next-auth/react";
 import {
   Form,
   FormField,
@@ -15,7 +16,7 @@ import { Input } from "../../../@/components/ui/input";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { signInSchema } from "../../../model/Schema/signInSchema";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Card,
   CardContent,
@@ -52,9 +53,12 @@ export default function SignInForm() {
         redirect: false,
       });
       console.log(response);
-      if (!response.ok) throw new Error();
-      window.location.href = response?.url || "/tournaments";
-      toast.success("Successfull Signup");
+      if (response?.error) {
+        toast.error(response.error);
+      } else {
+        router.push("/dashboard");
+        toast.success("Successfull Signup");
+      }
     } catch (error) {
       toast.error("Username / Password mismatched");
     } finally {
@@ -63,12 +67,19 @@ export default function SignInForm() {
   };
 
   const handleGoogleSignIn = async () => {
-    await signIn("google", { callbackUrl: "/" });
+    await signIn("google", { callbackUrl: "/dashboard" });
   };
 
   const handleDiscordSignIn = async () => {
-    await signIn("discord", { callbackUrl: "/" });
+    await signIn("discord", { callbackUrl: "/dashboard" });
   };
+  const { data: session, status } = useSession();
+
+  useEffect(() => {
+    if (status === "authenticated") {
+      router.push("/dashboard");
+    }
+  }, [status, router]);
 
   return (
     <div>
