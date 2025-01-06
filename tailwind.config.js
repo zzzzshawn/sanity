@@ -15,6 +15,7 @@ function addVariablesForColors({ addBase, theme }) {
 
 /** @type {import('tailwindcss').Config} */
 module.exports = {
+  darkMode: "selector",
   content: ["app/**/*.{ts,tsx,js,jsx}", "components/**/*.{ts,tsx,js,jsx}"],
   theme: {
     container: {

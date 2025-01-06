@@ -1,0 +1,7 @@
+.custom {
+  .name {
+    display: flex;
+    gap: 3px;
+    align-items: center;
+  }
+}

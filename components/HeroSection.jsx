@@ -13,6 +13,7 @@ export default function HeroSection() {
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.8, delay: 0.4 }}
     >
+
       <Vortex>
         <div className="text-center max-w-4xl mx-auto space-y-6">
           <div className="flex items-center  gap-2 w-fit mx-auto px-4 py-1.5  rounded-full text-sm font-medium border border-neutral-700">
@@ -24,6 +25,7 @@ export default function HeroSection() {
           <h1 className="text-4xl md:text-4xl lg:text-6xl font-semibold max-w-7xl mx-auto text-center mt-6 relative z-20 py-6 bg-clip-text text-transparent bg-gradient-to-b from-neutral-800 via-neutral-700 to-neutral-700 dark:from-neutral-800 dark:via-white dark:to-white">
             Compete like never before in the ultimate esports tournaments!{" "}
           </h1>
+
 
           <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
             Sanity is a suite of powerful tools for organizers, agencies,

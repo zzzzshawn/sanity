@@ -20,6 +20,7 @@ import { useSession } from "next-auth/react";
 import UserProfile from "../components/UserProfile";
 import { LogoutButton } from "./LogoutButton";
 import { BiExit } from "react-icons/bi";
+import { ThemeModeToggle } from "../components/ThemeModeToggle";
 
 const Navbar = () => {
   const session = useSession();
@@ -125,59 +126,63 @@ const Navbar = () => {
             </button>
           </Link>
         )}
+        <ThemeModeToggle />
       </div>
 
       {/* mobile nav menu */}
-      <div className="lg:hidden flex flex-row gap-8 items-center transition-all">
-        {session.status == "authenticated" && <NotificationBar />}
-        <Sheet>
-          <SheetTrigger>
-            <AlignJustify aria-label="nav-toggle-mob" className="size-7" />
-          </SheetTrigger>
-          <SheetContent className="flex flex-col items-start justify-start bg-black">
-            <SheetHeader>
-              <SheetTitle>Contents</SheetTitle>
-            </SheetHeader>
-            <div className="grid gap-4 mt-2">
-              <nav className="flex flex-col gap-4">
-                {navLinks.map((item, index) => (
+      <div className="lg:hidden flex items-center space-x-2">
+        <div className="flex flex-row gap-8 items-center transition-all">
+          {session.status == "authenticated" && <NotificationBar />}
+          <Sheet>
+            <SheetTrigger>
+              <AlignJustify aria-label="nav-toggle-mob" className="size-7" />
+            </SheetTrigger>
+            <SheetContent className="flex flex-col items-start justify-start bg-black">
+              <SheetHeader>
+                <SheetTitle>Contents</SheetTitle>
+              </SheetHeader>
+              <div className="grid gap-4 mt-2">
+                <nav className="flex flex-col gap-4">
+                  {navLinks.map((item, index) => (
+                    <Link
+                      key={index}
+                      href={item.href}
+                      className="font-medium text-lg"
+                      aria-label={`${item.title}-nav-item`}
+                    >
+                      {item.title}
+                    </Link>
+                  ))}
+                </nav>
+              </div>
+              <SheetFooter className="mt-2 w-full items-center flex justify-center">
+                {session.status == "authenticated" ? (
+                  <div className="w-full flex items-center justify-center">
+                    <LogoutButton>
+                      <BiExit className="text-red-400 w-5 h-5 mr-2" />
+                      <span>Logout</span>
+                    </LogoutButton>
+                  </div>
+                ) : (
                   <Link
-                    key={index}
-                    href={item.href}
-                    className="font-medium text-lg"
-                    aria-label={`${item.title}-nav-item`}
+                    href="/sign-in"
+                    aria-label="join-community"
+                    className="w-full"
                   >
-                    {item.title}
+                    <Button
+                      variant="outline"
+                      className="bg-primary hover:bg-primary-hover border border-neutral-700 w-full "
+                      arial-label="join-community-btn"
+                    >
+                      SignIn
+                    </Button>
                   </Link>
-                ))}
-              </nav>
-            </div>
-            <SheetFooter className="mt-2 w-full items-center flex justify-center">
-              {session.status == "authenticated" ? (
-                <div className="w-full flex items-center justify-center">
-                  <LogoutButton>
-                    <BiExit className="text-red-400 w-5 h-5 mr-2" />
-                    <span>Logout</span>
-                  </LogoutButton>
-                </div>
-              ) : (
-                <Link
-                  href="/sign-in"
-                  aria-label="join-community"
-                  className="w-full"
-                >
-                  <Button
-                    variant="outline"
-                    className="bg-primary hover:bg-primary-hover border border-neutral-700 w-full "
-                    arial-label="join-community-btn"
-                  >
-                    SignIn
-                  </Button>
-                </Link>
-              )}
-            </SheetFooter>
-          </SheetContent>
-        </Sheet>
+                )}
+              </SheetFooter>
+            </SheetContent>
+          </Sheet>
+        </div>
+        <ThemeModeToggle />
       </div>
     </div>
   );
