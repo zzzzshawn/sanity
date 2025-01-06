@@ -54,7 +54,7 @@ export default function Footer() {
             </div>
 
             {/* desc */}
-            <div className="mt-5 max-w-sm leading-relaxed font-medium text-gray-500">
+            <div className="mt-5 max-w-sm leading-relaxed font-medium text-neutral-700 dark:text-gray-400">
               <p>
                 Sanity Gaming covers every single aspect of esports community.
                 Which a gamer desires we aim to connect organizers with players.

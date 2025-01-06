@@ -52,19 +52,19 @@ const Feature = ({ title, description, icon, index }) => {
       )}
     >
       {index < 4 && (
-        <div className="opacity-0 group-hover:opacity-100 transition duration-200 absolute inset-0 h-full w-full bg-gradient-to-t from-neutral-100 to-transparent pointer-events-none" />
+        <div className="opacity-0 group-hover:opacity-100 transition duration-200 absolute inset-0 h-full w-full bg-gradient-to-t  dark:from-white/5 from-black/5 rounded-b-md to-transparent pointer-events-none" />
       )}
       {index >= 4 && (
-        <div className="opacity-0 group-hover:opacity-100 transition duration-200 absolute inset-0 h-full w-full bg-gradient-to-b from-neutral-100 to-transparent pointer-events-none" />
+        <div className="opacity-0 group-hover:opacity-100 transition duration-200 absolute inset-0 h-full w-full bg-gradient-to-b  dark:from-white/5 from-black/5 rounded-b-md to-transparent pointer-events-none" />
       )}
-      <div className="mb-4 relative z-10 px-10 text-white">{icon}</div>
+      <div className="mb-4 relative z-10 px-10">{icon}</div>
       <div className="text-lg font-bold mb-2 relative z-10 px-10">
         <div className="absolute left-0 inset-y-0 h-6 group-hover:h-8 w-1 rounded-tr-full rounded-br-full bg-neutral-300 group-hover:bg-blue-500 transition-all duration-200 origin-center" />
-        <span className="group-hover:scale-105 transition-all duration-200 inline-block text-neutral-200 group-hover:text-black">
+        <span className="group-hover:scale-105 transition-all duration-200 inline-block dark:text-gray-300 text-gray-800">
           {title}
         </span>
       </div>
-      <p className="text-sm text-neutral-700 max-w-xs relative z-10 px-10 group-hover:scale-105 transition-all duration-200">
+      <p className="text-sm text-neutral-700 dark:text-gray-400 max-w-xs relative z-10 px-10 group-hover:scale-105 transition-all duration-200">
         {description}
       </p>
     </div>
