@@ -16,14 +16,14 @@ export default function HeroSection() {
       {/* <Vortex> kept it for now */}
       <div className="text-center max-w-4xl mx-auto space-y-6">
         <div className="flex items-center  gap-2 w-fit mx-auto px-4 py-1.5  rounded-full text-sm font-medium border border-neutral-700">
-          <p className="bg-gradient-to-r from-primary to-secondary bg-clip-text text-white">
+          <p className="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
             Discover new heights{" "}
           </p>
         </div>
 
-        <h1 className="text-5xl md:text-6xl font-bold leading-tight">
+        <h1 className="text-5xl md:text-6xl font-bold leading-none">
           Manage your gaming competitions{" "}
-          <span className="bg-gradient-to-r from-primary to-secondary bg-clip-text text-white">
+          <span className="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent leading-none">
             with the right tools
           </span>
         </h1>
