@@ -84,9 +84,6 @@ export default function Page() {
     if (values < 4) {
       toast.error("Number of teams must be greater than 4");
       return;
-    } else if ((values & (values - 1)) !== 0) {
-      toast.error("Number of teams must be a power of 2 (e.g. 4, 8, 16, etc.)");
-      return;
     }
 
     const teams = Array.from({ length: values }, (_, i) => `Team${i + 1}`);
@@ -106,12 +103,22 @@ export default function Page() {
   async function rendering() {
     if (!info) return;
 
+    const teamArray = info.teams;
+    const len = teamArray.length;
+    const nearestPowerOf2 = Math.pow(2, Math.ceil(Math.log2(len)));
+    const byesCount = nearestPowerOf2 - len;
+
+    const paddedTeams = [
+      ...teamArray,
+      ...Array.from({ length: byesCount }, (_, i) => `Bye ${i + 1}`),
+    ];
+
     try {
       await manager.create.stage({
         name: info.tournament_name,
         tournamentId: 0,
         type: info.format,
-        seeding: info.teams,
+        seeding: paddedTeams,
         settings: {
           consolationFinal: info.consolationFinal,
           grandFinal: info.grandFinalType,
@@ -135,14 +142,20 @@ export default function Page() {
   async function rerendering() {
     if (!isBracketsViewerReady || !stageData) return;
 
+    // const bracketsViewerNode = document.querySelector(".brackets-viewer");
+    // bracketsViewerNode?.replaceChildren();
+
     // window.bracketsViewer.onMatchClicked = async (match) => {
+    //   console.log("Match clicked", match);
     //   try {
     //     await manager.update.match({
     //       id: match.id,
     //       opponent1: { score: 5 },
     //       opponent2: { score: 7, result: "win" },
     //     });
-    //   } catch (error) {}
+    //   } catch (error) {
+    //     console.error("Error during match update:", error);
+    //   }
     //   const tourneyData2 = await manager.get.currentMatches(0);
     //   const tourneyData = await manager.get.stageData(0);
     //   setStageData(tourneyData);
@@ -172,15 +185,6 @@ export default function Page() {
             }
           }
         },
-      },
-      {
-        onMatchClick: (match) => console.log("A match was clicked", match),
-        selector: "#example",
-        participantOriginPlacement: "before",
-        separatedChildCountLabel: true,
-        showSlotsOrigin: true,
-        showLowerBracketSlotsOrigin: true,
-        highlightParticipantOnHover: true,
       },
     );
   }
@@ -317,10 +321,7 @@ export default function Page() {
           </Form>
         ) : (
           <form onSubmit={handleSubmit} className="lg:w-1/2 mx-auto">
-            <h2 className="text-2xl font-bold">Enter Number of Teams</h2>
-            <p className="text-sm text-muted-foreground mb-2">
-              The number of teams must be a power of 2 (e.g., 4, 8, 16, etc.).
-            </p>
+            <h2 className="text-2xl font-bold mb-2">Enter Number of Teams</h2>
             <Input
               type="text"
               id="number"
