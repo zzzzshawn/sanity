@@ -36,10 +36,6 @@ const bracketSchema = z.object({
   grandFinalType: z.enum(["simple", "double"]),
 });
 
-const teamSchema = z.object({
-  teams: z.array(z.string().min(1)),
-});
-
 const storage = new InMemoryDatabase();
 const manager = new BracketsManager(storage);
 
@@ -50,6 +46,24 @@ export default function Page() {
   const [stageData, setStageData] = useState(null);
   const [info, setInfo] = useState(null);
   const [isBracketsViewerReady, setIsBracketsViewerReady] = useState(false);
+  const [teams, setTeams] = useState("");
+  const [error, setError] = useState("");
+
+  const handleInputChange = (e) => {
+    setTeams(e.target.value);
+    setError("");
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    if (isNaN(teams) || teams === "") {
+      setError("Please enter a valid number.");
+    } else {
+      onTeamSubmit(teams);
+      setTeams("");
+    }
+  };
 
   const bracketForm = useForm({
     resolver: zodResolver(bracketSchema),
@@ -61,35 +75,23 @@ export default function Page() {
     },
   });
 
-  const teamForm = useForm({
-    resolver: zodResolver(teamSchema),
-    defaultValues: {
-      teams: ["", "", "", ""],
-    },
-  });
-
   function onBracketSubmit(values) {
     setBracketInfo(values);
     setBracketCreated(true);
   }
 
   function onTeamSubmit(values) {
-    if (values.teams.length < 4) {
-      toast.error("Please enter at least 4 team names.");
+    if (values < 4) {
+      toast.error("Number of teams must be greater than 4");
       return;
-    }
-    if ((values.teams.length & (values.teams.length - 1)) !== 0) {
+    } else if ((values & (values - 1)) !== 0) {
       toast.error("Number of teams must be a power of 2 (e.g. 4, 8, 16, etc.)");
       return;
     }
 
-    const uniqueTeams = new Set(values.teams);
-    if (uniqueTeams.size !== values.teams.length) {
-      toast.error("Team names must be unique.");
-      return;
-    }
+    const teams = Array.from({ length: values }, (_, i) => `Team${i + 1}`);
 
-    const res = { ...bracketInfo, ...values };
+    const res = { ...bracketInfo, teams };
     setInfo(res);
 
     console.log("Bracket Info", JSON.stringify(info, null, 2));
@@ -133,56 +135,54 @@ export default function Page() {
   async function rerendering() {
     if (!isBracketsViewerReady || !stageData) return;
 
-    try {
-      const bracketsViewerNode = document.querySelector(".brackets-viewer");
-      bracketsViewerNode?.replaceChildren();
+    // window.bracketsViewer.onMatchClicked = async (match) => {
+    //   try {
+    //     await manager.update.match({
+    //       id: match.id,
+    //       opponent1: { score: 5 },
+    //       opponent2: { score: 7, result: "win" },
+    //     });
+    //   } catch (error) {}
+    //   const tourneyData2 = await manager.get.currentMatches(0);
+    //   const tourneyData = await manager.get.stageData(0);
+    //   setStageData(tourneyData);
+    // };
 
-      window.bracketsViewer.onMatchClicked = async (match) => {
-        try {
-          await manager.update.match({
-            id: match.id,
-            opponent1: { score: 5 },
-            opponent2: { score: 7, result: "win" },
-          });
-        } catch (error) {}
-        const tourneyData2 = await manager.get.currentMatches(0);
-        const tourneyData = await manager.get.stageData(0);
-        setStageData(tourneyData);
-      };
+    window.bracketsViewer.setParticipantImages(
+      stageData.participant.map((participant) => ({
+        participantId: participant.id,
+        imageUrl: "https://github.githubassets.com/pinned-octocat.svg",
+      })),
+    );
 
-      if (stageData.participant) {
-        window.bracketsViewer.setParticipantImages(
-          stageData.participant.map((participant) => ({
-            participantId: participant.id,
-            imageUrl: "https://github.githubassets.com/pinned-octocat.svg",
-          })),
-        );
-      }
-
-      window.bracketsViewer.render(
-        {
-          stages: stageData.stage,
-          matches: stageData.match,
-          matchGames: stageData.match_game,
-          participants: stageData.participant,
-        },
-        {
-          customRoundName: (info, t) => {
-            if (info.fractionOfFinal === 1 / 2) {
+    await window.bracketsViewer.render(
+      {
+        stages: stageData.stage,
+        matches: stageData.match,
+        matchGames: stageData.match_game,
+        participants: stageData.participant,
+      },
+      {
+        customRoundName: (info, t) => {
+          if (info.fractionOfFinal === 1 / 2) {
+            if (info.groupType === "single-bracket") {
               return "Semi Finals";
+            } else {
+              return `${t(`abbreviations.${info.groupType}`)} Semi Finals`;
             }
-            if (info.fractionOfFinal === 1 / 4) {
-              return "Quarter Finals";
-            }
-            if (info.finalType === "grand-final") {
-              return `Grand Final`;
-            }
-          },
+          }
         },
-      );
-    } catch (error) {
-      console.error("Error during rerendering:", error);
-    }
+      },
+      {
+        onMatchClick: (match) => console.log("A match was clicked", match),
+        selector: "#example",
+        participantOriginPlacement: "before",
+        separatedChildCountLabel: true,
+        showSlotsOrigin: true,
+        showLowerBracketSlotsOrigin: true,
+        highlightParticipantOnHover: true,
+      },
+    );
   }
 
   useEffect(() => {
@@ -202,13 +202,6 @@ export default function Page() {
       rerendering();
     }
   }, [isBracketsViewerReady, stageData]);
-
-  const removeParticipant = (index) => {
-    const updatedTeams = teamForm
-      .getValues("teams")
-      .filter((_, i) => i !== index);
-    teamForm.setValue("teams", updatedTeams);
-  };
 
   return (
     <div>
@@ -323,67 +316,29 @@ export default function Page() {
             </form>
           </Form>
         ) : (
-          <Form {...teamForm}>
-            <form
-              onSubmit={teamForm.handleSubmit(onTeamSubmit)}
-              className="space-y-6"
-            >
-              <h2 className="text-2xl font-bold mb-4">Enter Team Names</h2>
-              <p className="text-sm text-muted-foreground mb-4">
-                Please enter at least 4 team names.
-              </p>
-              {teamForm.watch("teams").map((_, index) => (
-                <FormField
-                  key={index}
-                  control={teamForm.control}
-                  name={`teams.${index}`}
-                  render={({ field }) => (
-                    <FormItem>
-                      <div className="flex items-center space-x-4">
-                        <div>
-                          <FormLabel className="text-base">
-                            Team {index + 1}
-                          </FormLabel>
-                        </div>
-                        <FormControl>
-                          <Input
-                            {...field}
-                            placeholder={`Team ${index + 1} Name`}
-                            className="w-[80%]"
-                          />
-                        </FormControl>
-                        <Button
-                          type="button"
-                          onClick={() => removeParticipant(index)}
-                        >
-                          Remove
-                        </Button>
-                      </div>
-                    </FormItem>
-                  )}
-                />
-              ))}
+          <form onSubmit={handleSubmit} className="lg:w-1/2 mx-auto">
+            <h2 className="text-2xl font-bold">Enter Number of Teams</h2>
+            <p className="text-sm text-muted-foreground mb-2">
+              The number of teams must be a power of 2 (e.g., 4, 8, 16, etc.).
+            </p>
+            <Input
+              type="text"
+              id="number"
+              value={teams}
+              onChange={handleInputChange}
+              placeholder="Enter Number of Teams"
+            />
+            {error && <p style={{ color: "red" }}>{error}</p>}
+            <div className="flex justify-center mt-4">
               <Button
-                type="button"
-                variant="outline"
-                onClick={() =>
-                  teamForm.setValue("teams", [...teamForm.watch("teams"), ""])
-                }
-                arial-label="add-another-team-btn"
+                type="submit"
+                disabled={showBrackets}
+                arial-label="submit-team-btn"
               >
-                Add Another Team
+                Submit
               </Button>
-              <div className="flex justify-center">
-                <Button
-                  type="submit"
-                  disabled={teamForm.formState.isSubmitting || showBrackets}
-                  arial-label="submit-team-btn"
-                >
-                  Submit Teams
-                </Button>
-              </div>
-            </form>
-          </Form>
+            </div>
+          </form>
         )}
       </div>
       {showBrackets ? (
