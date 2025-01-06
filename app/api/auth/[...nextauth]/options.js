@@ -1,26 +1,26 @@
-const { NextAuthOptions } = require("next-auth");
 const GoogleProvider = require("next-auth/providers/google").default;
 const DiscordProvider = require("next-auth/providers/discord").default;
 const bcrypt = require("bcryptjs");
 const UserModel = require("../../../../model/User").default;
 const dbConnect = require("../../../../lib/dbConnect");
+const { env } = require("../../../../lib/env");
 const CredentialsProvider = require("next-auth/providers/credentials").default;
 
-// Add the bypass credentials
+// bypass credentials
 const bypassCredentials = {
   email: "test@gmail.com",
-  password: "Gkjdfnjg$3",
+  password: "test123",
 };
 
 const authOptions = {
   providers: [
     GoogleProvider({
-      clientId: process.env.GOOGLE_CLIENT_ID,
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+      clientId: env.GOOGLE_CLIENT_ID,
+      clientSecret: env.GOOGLE_CLIENT_SECRET,
     }),
     DiscordProvider({
-      clientId: process.env.DISCORD_CLIENT_ID,
-      clientSecret: process.env.DISCORD_CLIENT_SECRET,
+      clientId: env.DISCORD_CLIENT_ID,
+      clientSecret: env.DISCORD_CLIENT_SECRET,
       authorization: { params: { scope: "identify email" } },
     }),
     CredentialsProvider({
@@ -151,7 +151,7 @@ const authOptions = {
     strategy: "jwt",
   },
   debug: process.env.NODE_ENV === "development",
-  secret: process.env.NEXTAUTH_SECRET,
+  secret: env.NEXTAUTH_SECRET,
 };
 
 module.exports = { authOptions };
