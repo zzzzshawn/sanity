@@ -1,14 +1,15 @@
 import Image from "next/image";
 import Link from "next/link";
 import Filter from "../../components/Filter";
+import { env } from "../../lib/env";
 
 export default async function Page({ searchParams }) {
   const params = await searchParams; // Await searchParams before using it
   const filter = params?.filter; // Access filter safely
 
   const filterUrl = filter
-    ? `${process.env.NEXT_PUBLIC_BASE_URL}/api/games?filter=${filter}`
-    : `${process.env.NEXT_PUBLIC_BASE_URL}/api/games`;
+    ? `${env.NEXT_PUBLIC_BASE_URL}/api/games?filter=${filter}`
+    : `${env.NEXT_PUBLIC_BASE_URL}/api/games`;
 
   let gameData = [];
   let errorMessage = "";
