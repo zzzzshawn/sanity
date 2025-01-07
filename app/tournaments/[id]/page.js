@@ -1,6 +1,6 @@
 "use client";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 // import { useRouter } from "next/navigation";
 import TournamentBracket from "../../../components/TournamentBracket";
 import { Button } from "../../../@/components/ui/button";
@@ -25,6 +25,8 @@ export default function TournamentPage({ params }) {
   // const [registering, setRegistering] = useState(false);
   // const router = useRouter();
 
+  const unwrappedParams = React.use(params);
+
   useEffect(() => {
     loadTournamentData();
   }, []);
@@ -32,7 +34,7 @@ export default function TournamentPage({ params }) {
   const loadTournamentData = async () => {
     try {
       setLoading(true);
-      const data = await fetchTournamentData(params.id);
+      const data = await fetchTournamentData(unwrappedParams.id);
       setTournament(data);
       setError(null);
     } catch (err) {
@@ -45,7 +47,7 @@ export default function TournamentPage({ params }) {
   const handleRegister = async () => {
     try {
       setRegistering(true);
-      await registerForTournament(params.id);
+      await registerForTournament(unwrappedParams.id);
       toast.success("Registered for tournament successfully");
       router.refresh();
     } catch (err) {
