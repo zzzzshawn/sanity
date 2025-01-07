@@ -31,7 +31,6 @@ export async function GET(request, { params }) {
       );
     }
 
-    // Transform data to include only necessary information
     const tournamentData = {
       id: tournament._id,
       tournamentName: tournament.tournamentName || "Unnamed Tournament",
