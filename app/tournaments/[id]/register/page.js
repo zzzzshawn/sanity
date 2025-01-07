@@ -1,11 +1,14 @@
 "use client";
 
+import React from "react";
 import { useForm } from "react-hook-form";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 
 export default function RegisterPage({ params }) {
+  const unwrappedParams = React.use(params);
+
   const {
     register,
     handleSubmit,
@@ -24,13 +27,13 @@ export default function RegisterPage({ params }) {
 
     try {
       const response = await axios.post(
-        `/api/tournaments/${params.id}/registration`,
+        `/api/tournaments/${unwrappedParams.id}/registration`,
         data,
       );
 
       if (response.status === 200) {
         toast.success("Registration successfull");
-        router.push(`/tournaments/${params.id}`);
+        router.push(`/tournaments/${unwrappedParams.id}`);
       } else {
         toast.error("Registration failed. Please try again.");
       }
@@ -39,7 +42,7 @@ export default function RegisterPage({ params }) {
     }
   };
 
-  if (!params.id) {
+  if (!unwrappedParams.id) {
     return <p>Loading...</p>;
   }
 
