@@ -87,7 +87,6 @@ export default function TournamentDashboard({ params }) {
 
   return (
     <div className="container mx-auto p-6 space-y-6">
-      {/* Header */}
       <div className="flex flex-col space-y-2">
         <h1 className="text-3xl font-bold">{tournament.tournamentName}</h1>
         <div className="flex gap-2">
@@ -97,9 +96,7 @@ export default function TournamentDashboard({ params }) {
         </div>
       </div>
 
-      {/* Main Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {/* Game Info */}
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">
@@ -119,7 +116,6 @@ export default function TournamentDashboard({ params }) {
           </CardContent>
         </Card>
 
-        {/* Organizer Info */}
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">
@@ -139,7 +135,6 @@ export default function TournamentDashboard({ params }) {
           </CardContent>
         </Card>
 
-        {/* Dates */}
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">
@@ -165,7 +160,6 @@ export default function TournamentDashboard({ params }) {
           </CardContent>
         </Card>
 
-        {/* Participant Info */}
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">
@@ -193,7 +187,6 @@ export default function TournamentDashboard({ params }) {
           </CardContent>
         </Card>
 
-        {/* Prize Info */}
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Prize Pool</CardTitle>
@@ -217,7 +210,6 @@ export default function TournamentDashboard({ params }) {
           </CardContent>
         </Card>
 
-        {/* Links & Resources */}
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">
@@ -241,7 +233,6 @@ export default function TournamentDashboard({ params }) {
         </Card>
       </div>
 
-      {/* Rules Section */}
       {tournament.rules && (
         <Card className="mt-6">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
