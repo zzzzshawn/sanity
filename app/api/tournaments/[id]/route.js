@@ -8,7 +8,7 @@ export async function GET(request, { params }) {
   await dbConnect();
 
   try {
-    const id = params.id;
+    const { id } = await params;
 
     // Ensure all models are registered
     Games;
