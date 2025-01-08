@@ -94,14 +94,14 @@ const BracketSchema = new Schema({
   users: [
     {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "User",
+      ref: "UserModel",
     },
   ],
 
   // Optional: Organizer for the bracket
   organizer: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "User",
+    ref: "UserModel",
   },
 });
 

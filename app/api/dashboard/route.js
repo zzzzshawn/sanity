@@ -30,20 +30,20 @@ export async function GET(request) {
       userBrackets,
     ] = await Promise.all([
       // Fetch tournaments where the user is a participant
-      Tournament.find() // Filter where participants include the userId
+      Tournament.find({ participants: userId })
         .select(
           "_id tournamentName gameType tournamentDates status participants",
         )
         .lean(),
 
       // Fetch upcoming tournaments
-      Tournament.find() // Only fetch future tournaments
+      Tournament.find({ "tournamentDates.startDate": { $gte: new Date() } })
         .select("_id tournamentName gameType tournamentDates")
         .limit(5)
         .lean(),
 
       // Fetch user's teams
-      TeamModel.find()
+      TeamModel.find({ players: userId })
         .select("_id teamname")
         .lean()
         .then((teams) =>
@@ -54,7 +54,9 @@ export async function GET(request) {
         ),
 
       // Fetch brackets created by the user
-      Bracket.find().select("_id tournamentName rounds format teams").lean(),
+      Bracket.find({ createdBy: userId })
+        .select("_id tournamentName rounds format teams")
+        .lean(),
     ]);
 
     console.log("participatedTournaments", participatedTournaments);

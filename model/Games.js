@@ -10,7 +10,7 @@ const GamesSchema = new Schema({
   players: [
     {
       type: Schema.Types.ObjectId,
-      ref: "User",
+      ref: "UserModel",
     },
   ],
 });
