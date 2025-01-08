@@ -24,6 +24,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
 import { InMemoryDatabase } from "brackets-memory-db";
 import { BracketsManager } from "brackets-manager";
+import { FaArrowLeftLong } from "react-icons/fa6";
 
 import "brackets-viewer/dist/brackets-viewer.min.js";
 import "brackets-viewer/dist/brackets-viewer.min.css";
@@ -210,8 +211,19 @@ export default function Page() {
   return (
     <div>
       <div className="bg-card border p-6 rounded-md max-w-[80%] mx-auto">
-        <div className="text-center flex items-center justify-center border-b pb-4 mb-4">
-          <h2 className="pb-2 scroll-m-20 text-3xl font-semibold tracking-tight absolute left-1/2 transform -translate-x-1/2">
+        <div className="text-center flex items-center justify-center border-b pb-6 mb-4">
+          {bracketCreated ? (
+            <Button
+              variant="ghost"
+              onClick={() => {
+                setBracketCreated(false);
+              }}
+              className="mr-auto"
+            >
+              <FaArrowLeftLong className="size-5 m-0" />
+            </Button>
+          ) : null}
+          <h2 className="py-2 scroll-m-20 text-3xl font-semibold tracking-tight absolute left-1/2 transform -translate-x-1/2">
             Create Bracket
           </h2>
         </div>
@@ -321,20 +333,26 @@ export default function Page() {
           </Form>
         ) : (
           <form onSubmit={handleSubmit} className="lg:w-1/2 mx-auto">
-            <h2 className="text-2xl font-bold mb-2">Enter Number of Teams</h2>
-            <Input
-              type="text"
-              id="number"
-              value={teams}
-              onChange={handleInputChange}
-              placeholder="Enter Number of Teams"
-            />
-            {error && <p style={{ color: "red" }}>{error}</p>}
-            <div className="flex justify-center mt-4">
+            <h2 className="text-2xl font-bold mb-4 text-center">
+              Enter Number of Teams
+            </h2>
+            <div className="flex flex-col justify-center gap-4 md:flex-row lg:flex-row">
+              <div>
+                <Input
+                  type="number"
+                  id="number"
+                  value={teams}
+                  onChange={handleInputChange}
+                  placeholder="Enter Number of Teams"
+                  className="w-full custom"
+                />
+                {error && <p style={{ color: "red" }}>{error}</p>}
+              </div>
               <Button
                 type="submit"
                 disabled={showBrackets}
                 arial-label="submit-team-btn"
+                className="w-full md:w-1/6 lg:w-1/6"
               >
                 Submit
               </Button>
