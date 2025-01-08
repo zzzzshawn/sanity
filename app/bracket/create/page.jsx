@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Button } from "../../../components/ui/button";
 import {
   Form,
@@ -22,14 +22,9 @@ import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
-import { InMemoryDatabase } from "brackets-memory-db";
-import { BracketsManager } from "brackets-manager";
 import { FaArrowLeftLong } from "react-icons/fa6";
 import { useRouter } from "next/navigation";
-
-import "brackets-viewer/dist/brackets-viewer.min.js";
-import "brackets-viewer/dist/brackets-viewer.min.css";
-import "./styles.css";
+import Bracket from "../bracket";
 
 const bracketSchema = z.object({
   tournament_name: z.string().min(1),
@@ -38,16 +33,11 @@ const bracketSchema = z.object({
   grandFinalType: z.enum(["simple", "double"]),
 });
 
-const storage = new InMemoryDatabase();
-const manager = new BracketsManager(storage);
-
 export default function Page() {
   const [bracketCreated, setBracketCreated] = useState(false);
   const [bracketInfo, setBracketInfo] = useState(null);
   const [showBrackets, setShowBrackets] = useState(false);
-  const [stageData, setStageData] = useState(null);
   const [info, setInfo] = useState(null);
-  const [isBracketsViewerReady, setIsBracketsViewerReady] = useState(false);
   const [teams, setTeams] = useState("");
   const [error, setError] = useState("");
   const router = useRouter();
@@ -94,7 +84,7 @@ export default function Page() {
     const res = { ...bracketInfo, teams };
     setInfo(res);
 
-    console.log("Bracket Info", JSON.stringify(info, null, 2));
+    // console.log("Bracket Info", JSON.stringify(info, null, 2));
 
     if (!showBrackets) {
       setShowBrackets(true);
@@ -102,120 +92,6 @@ export default function Page() {
 
     toast.success("Bracket created successfully");
   }
-
-  async function rendering() {
-    if (!info) return;
-
-    const teamArray = info.teams;
-    const len = teamArray.length;
-    const nearestPowerOf2 = Math.pow(2, Math.ceil(Math.log2(len)));
-    const byesCount = nearestPowerOf2 - len;
-
-    const paddedTeams = [
-      ...teamArray,
-      ...Array.from({ length: byesCount }, (_, i) => `Bye ${i + 1}`),
-    ];
-
-    try {
-      await manager.create.stage({
-        name: info.tournament_name,
-        tournamentId: 0,
-        type: info.format,
-        seeding: paddedTeams,
-        settings: {
-          consolationFinal: info.consolationFinal,
-          grandFinal: info.grandFinalType,
-        },
-      });
-
-      const data = await manager.get.stageData(0);
-      setStageData(data);
-      console.log("Stage Data", stageData);
-    } catch (error) {
-      console.error("Error during rendering:", error);
-    }
-  }
-
-  async function removeBracket() {
-    storage.reset();
-    manager.reset;
-    setShowBrackets(false);
-    setBracketCreated(false);
-    bracketForm.reset({
-      tournament_name: "",
-      format: "single_elimination",
-      consolationFinal: false,
-      grandFinalType: "simple",
-    });
-  }
-
-  async function rerendering() {
-    if (!isBracketsViewerReady || !stageData) return;
-
-    // const bracketsViewerNode = document.querySelector(".brackets-viewer");
-    // bracketsViewerNode?.replaceChildren();
-
-    // window.bracketsViewer.onMatchClicked = async (match) => {
-    //   console.log("Match clicked", match);
-    //   try {
-    //     await manager.update.match({
-    //       id: match.id,
-    //       opponent1: { score: 5 },
-    //       opponent2: { score: 7, result: "win" },
-    //     });
-    //   } catch (error) {
-    //     console.error("Error during match update:", error);
-    //   }
-    //   const tourneyData2 = await manager.get.currentMatches(0);
-    //   const tourneyData = await manager.get.stageData(0);
-    //   setStageData(tourneyData);
-    // };
-
-    window.bracketsViewer.setParticipantImages(
-      stageData.participant.map((participant) => ({
-        participantId: participant.id,
-        imageUrl: "https://github.githubassets.com/pinned-octocat.svg",
-      })),
-    );
-
-    await window.bracketsViewer.render(
-      {
-        stages: stageData.stage,
-        matches: stageData.match,
-        matchGames: stageData.match_game,
-        participants: stageData.participant,
-      },
-      {
-        customRoundName: (info, t) => {
-          if (info.fractionOfFinal === 1 / 2) {
-            if (info.groupType === "single-bracket") {
-              return "Semi Finals";
-            } else {
-              return `${t(`abbreviations.${info.groupType}`)} Semi Finals`;
-            }
-          }
-        },
-      },
-    );
-  }
-
-  useEffect(() => {
-    if (showBrackets) {
-      rendering();
-    }
-  }, [showBrackets]);
-
-  useEffect(() => {
-    if (typeof window !== "undefined" && window.bracketsViewer) {
-      setIsBracketsViewerReady(true);
-    }
-  }, []);
-
-  useEffect(() => {
-    if (isBracketsViewerReady && stageData) {
-      rerendering();
-    }
-  }, [isBracketsViewerReady, stageData]);
 
   return (
     <div>
@@ -371,10 +247,13 @@ export default function Page() {
       </div>
       {showBrackets ? (
         <div className="mt-8 w-[80%] mx-auto">
-          <Button onClick={removeBracket} className="mb-1">
-            Create New Bracket
-          </Button>
-          <div className="brackets-viewer custom"></div>
+          <Bracket
+            teams={info.teams}
+            tournament_name={info.tournament_name}
+            format={info.format}
+            consolationFinal={info.consolationFinal}
+            grandFinalType={info.grandFinalType}
+          />
         </div>
       ) : null}
     </div>
