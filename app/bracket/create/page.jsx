@@ -24,7 +24,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
 import { FaArrowLeftLong } from "react-icons/fa6";
 import { useRouter } from "next/navigation";
-import Bracket from "../bracket";
+import Bracket from "../Bracket";
 
 const bracketSchema = z.object({
   tournament_name: z.string().min(1),
@@ -73,6 +73,34 @@ export default function Page() {
     setBracketCreated(true);
   }
 
+  async function sendBrackets(values) {
+    try {
+      const response = await fetch("/api/brackets", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          tournament_name: values.tournament_name,
+          format: values.format,
+          consolationFinal: values.consolationFinal,
+          grandFinalType: values.grandFinalType,
+          teams: values.teams,
+        }),
+      });
+
+      const result = await response.json();
+
+      if (response.ok) {
+        toast.success("Bracket created successfully!");
+        console.log("Created Bracket ID:", result.id);
+      } else {
+        toast.error(result.error || "Failed to create bracket.");
+      }
+    } catch (error) {
+      console.error("Error creating bracket:", error);
+      toast.error("An unexpected error occurred.");
+    }
+  }
+
   function onTeamSubmit(values) {
     if (values < 4) {
       toast.error("Number of teams must be greater than 4");
@@ -83,6 +111,14 @@ export default function Page() {
 
     const res = { ...bracketInfo, teams };
     setInfo(res);
+
+    sendBrackets({
+      tournament_name: res.tournament_name,
+      format: res.format,
+      consolationFinal: res.consolationFinal,
+      grandFinalType: res.grandFinalType,
+      teams: res.teams,
+    });
 
     // console.log("Bracket Info", JSON.stringify(info, null, 2));
 
