@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Button } from "../../components/ui/button";
+import { Button } from "../../../components/ui/button";
 import {
   Form,
   FormControl,
@@ -9,15 +9,15 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "../../@/components/ui/form";
+} from "../../../@/components/ui/form";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "../../@/components/ui/select";
-import { Input } from "../../@/components/ui/input";
+} from "../../../@/components/ui/select";
+import { Input } from "../../../@/components/ui/input";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -25,6 +25,7 @@ import { toast } from "sonner";
 import { InMemoryDatabase } from "brackets-memory-db";
 import { BracketsManager } from "brackets-manager";
 import { FaArrowLeftLong } from "react-icons/fa6";
+import { useRouter } from "next/navigation";
 
 import "brackets-viewer/dist/brackets-viewer.min.js";
 import "brackets-viewer/dist/brackets-viewer.min.css";
@@ -49,6 +50,7 @@ export default function Page() {
   const [isBracketsViewerReady, setIsBracketsViewerReady] = useState(false);
   const [teams, setTeams] = useState("");
   const [error, setError] = useState("");
+  const router = useRouter();
 
   const handleInputChange = (e) => {
     setTeams(e.target.value);
@@ -138,6 +140,13 @@ export default function Page() {
     storage.reset();
     manager.reset;
     setShowBrackets(false);
+    setBracketCreated(false);
+    bracketForm.reset({
+      tournament_name: "",
+      format: "single_elimination",
+      consolationFinal: false,
+      grandFinalType: "simple",
+    });
   }
 
   async function rerendering() {
@@ -212,17 +221,17 @@ export default function Page() {
     <div>
       <div className="bg-card border p-6 rounded-md max-w-[80%] mx-auto">
         <div className="text-center flex items-center justify-center border-b pb-6 mb-4">
-          {bracketCreated ? (
-            <Button
-              variant="ghost"
-              onClick={() => {
-                setBracketCreated(false);
-              }}
-              className="mr-auto"
-            >
-              <FaArrowLeftLong className="size-5 m-0" />
-            </Button>
-          ) : null}
+          <Button
+            variant="ghost"
+            onClick={() => {
+              bracketCreated
+                ? setBracketCreated(false)
+                : router.push("/bracket");
+            }}
+            className="mr-auto"
+          >
+            <FaArrowLeftLong className="size-5 m-0" />
+          </Button>
           <h2 className="py-2 scroll-m-20 text-3xl font-semibold tracking-tight absolute left-1/2 transform -translate-x-1/2">
             Create Bracket
           </h2>
@@ -363,7 +372,7 @@ export default function Page() {
       {showBrackets ? (
         <div className="mt-8 w-[80%] mx-auto">
           <Button onClick={removeBracket} className="mb-1">
-            Clear
+            Create New Bracket
           </Button>
           <div className="brackets-viewer custom"></div>
         </div>
