@@ -1,9 +1,9 @@
 import { getServerSession } from "next-auth/next";
-import { authOptions } from "../auth/[...nextauth]/route";
 import { NextResponse } from "next/server";
 import dbConnect from "../../../lib/dbConnect";
+import { authOptions } from "../../../lib/authOptions";
+import { TeamModel } from "../../../model/Team";
 import Tournament from "../../../model/Tournament";
-import Team from "../../../model/Team";
 import Bracket from "../../../model/Bracket";
 
 export async function GET(request) {
@@ -21,90 +21,56 @@ export async function GET(request) {
 
     await dbConnect();
 
-    const testData = {
-      participatedTournaments: [
-        {
-          _id: "T1",
-          tournamentName: "Tournament 1",
-          game: "BGMI",
-          startDate: new Date(),
-          status: "ongoing",
-        },
-        {
-          _id: "T2",
-          tournamentName: "Valo Tournament",
-          game: "Valorent",
-          startDate: new Date(),
-          status: "completed",
-        },
-      ],
-      upcomingTournaments: [
-        {
-          _id: "UT1",
-          tournamentName: "Tournament 3",
-          game: "Valorent",
-          registrationEndDate: new Date(Date.now()),
-        },
-        {
-          _id: "UT2",
-          tournamentName: "Tournament 4",
-          game: "Apex Legends",
-          registrationEndDate: new Date(Date.now() + 7 * 1000 * 86400),
-        },
-      ],
-      userTeams: [
-        {
-          _id: "team 1",
-          teamName: "Team 1",
-          members: ["pro", "exp", "a32"],
-        },
-        {
-          _id: "team 2",
-          teamName: "Team 2",
-          members: ["dragon", "vince", "strange"],
-        },
-      ],
-      userBrackets: [
-        {
-          _id: "B1",
-          name: "bgmi bracket",
-          rounds: 3,
-          teams: 9,
-        },
-        {
-          _id: "B2",
-          name: "valorent bracket",
-          rounds: 4,
-          teams: 15,
-        },
-      ],
-    };
-    return NextResponse.json(testData);
+    const userId = session.user._id;
 
-    /*
-      const [participatedTournaments, upcomingTournaments, userTeams, userBrackets] = await Promise.all([
-        Tournament.find({ "teamsRegistered.members": session.user.email }).lean(),
-        Tournament.find({ registrationEndDate: { $gt: new Date() } }).limit(5).lean(),
-        Team.find({ members: session.user.email }).lean(),
-        Bracket.find({ createdBy: session.user.email }).lean()
-      ]);
-  
-      return NextResponse.json({
-        participatedTournaments,
-        upcomingTournaments,
-        userTeams,
-        userBrackets
-      });
-      */
+    const [
+      participatedTournaments,
+      upcomingTournaments,
+      userTeams,
+      userBrackets,
+    ] = await Promise.all([
+      // Fetch tournaments where the user is a participant
+      Tournament.find() // Filter where participants include the userId
+        .select(
+          "_id tournamentName gameType tournamentDates status participants",
+        )
+        .lean(),
+
+      // Fetch upcoming tournaments
+      Tournament.find() // Only fetch future tournaments
+        .select("_id tournamentName gameType tournamentDates")
+        .limit(5)
+        .lean(),
+
+      // Fetch user's teams
+      TeamModel.find()
+        .select("_id teamname")
+        .lean()
+        .then((teams) =>
+          teams.map((team) => ({
+            ...team,
+            members: team.members || [],
+          })),
+        ),
+
+      // Fetch brackets created by the user
+      Bracket.find().select("_id tournamentName rounds format teams").lean(),
+    ]);
+
+    console.log("participatedTournaments", participatedTournaments);
+    console.log("upcomingTournaments", upcomingTournaments);
+    console.log("userTeams", userTeams);
+    console.log("userBrackets", userBrackets);
+
+    return NextResponse.json({
+      participatedTournaments,
+      upcomingTournaments,
+      userTeams,
+      userBrackets,
+    });
   } catch (error) {
-    console.log("API Error:", error);
+    console.error("API Error:", error);
     return NextResponse.json(
-      /*{
-        participatedTournaments: [],
-        upcomingTournaments: [],
-        userTeams: [],
-        userBrackets: []
-      }*/
       { error: "Internal Server Error" },
       { status: 500 },
     );

@@ -61,6 +61,24 @@ const userSchema = new Schema({
       ref: "Tournament",
     },
   ],
+  tournaments: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: "Tournament",
+    },
+  ],
+  brackets: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: "Bracket",
+    },
+  ],
+  games: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: "Game",
+    },
+  ],
 });
 
 // User Model

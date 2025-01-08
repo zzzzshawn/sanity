@@ -55,7 +55,10 @@ const stageSchema = new Schema({
     seedOrdering: [String],
     size: Number,
   },
-  tournament_id: String,
+  tournament_id: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Tournament",
+  },
   type: String,
 });
 
@@ -63,7 +66,6 @@ const BracketSchema = new Schema({
   group: [
     {
       id: Number,
-
       number: Number,
       stage_id: Number,
     },
@@ -80,7 +82,29 @@ const BracketSchema = new Schema({
     required: true,
   },
   createdAt: { type: Date, default: Date.now },
+
+  // Relation to the Tournament model
+  tournament: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Tournament",
+    required: true,
+  },
+
+  // Relation to the User model
+  users: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+    },
+  ],
+
+  // Optional: Organizer for the bracket
+  organizer: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User",
+  },
 });
 
-module.exports =
+const Bracket =
   mongoose.models.Bracket || mongoose.model("Bracket", BracketSchema);
+module.exports = Bracket;
