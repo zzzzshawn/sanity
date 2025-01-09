@@ -12,7 +12,7 @@ export async function GET(request, { params }) {
     const { id } = await params;
 
     // Convert string ID to ObjectId
-    const tournamentId = new mongoose.Types.ObjectId(id);
+    const tournamentId = mongoose.Types.ObjectId.createFromHexString(id);
 
     // Find bracket where any stage has the matching tournament_id
     const bracket = await Bracket.findOne({
@@ -71,7 +71,7 @@ export async function PUT(request, { params }) {
     const { matchId, winner, score } = await request.json();
 
     // Convert string ID to ObjectId
-    const tournamentId = new mongoose.Types.ObjectId(id);
+    const tournamentId = mongoose.Types.ObjectId.createFromHexString(id);
 
     const bracket = await Bracket.findOne({
       'stage.tournament_id': tournamentId
