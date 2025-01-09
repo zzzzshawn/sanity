@@ -1,10 +1,7 @@
 import { getServerSession } from "next-auth/next";
-import { authOptions } from "../auth/[...nextauth]/route";
+import { authOptions } from "../../../lib/authOptions";
 import { NextResponse } from "next/server";
 import dbConnect from "../../../lib/dbConnect";
-import Tournament from "../../../model/Tournament";
-import Team from "../../../model/Team";
-import Bracket from "../../../model/Bracket";
 
 export async function GET(request) {
   try {
