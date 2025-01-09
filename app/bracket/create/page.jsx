@@ -136,9 +136,12 @@ export default function Page() {
           <Button
             variant="ghost"
             onClick={() => {
-              bracketCreated
-                ? setBracketCreated(false)
-                : router.push("/bracket");
+              if (bracketCreated) {
+                setBracketCreated(false);
+                setShowBrackets(false);
+              } else {
+                router.push("/bracket");
+              }
             }}
             className="mr-auto"
           >

@@ -11,13 +11,25 @@ export async function POST(request) {
     await dbConnect();
     const body = await request.json();
 
+    const session = await getServerSession(authOptions);
+
+    if (!session || !session.user) {
+      return new NextResponse(
+        JSON.stringify({ success: false, message: "Unauthorized" }),
+        { status: 401 },
+      );
+    }
+
     const { tournament_name, format, consolationFinal, grandFinalType, teams } =
       body;
+
+    const userId = session.user._id;
 
     if (
       !tournament_name ||
       !format ||
       !grandFinalType ||
+      typeof consolationFinal !== "boolean" ||
       !teams ||
       teams.length < 4
     ) {
@@ -30,12 +42,15 @@ export async function POST(request) {
       );
     }
 
+    console.log("UserId", session.user._id);
+
     const newBracket = new Bracket({
       tournament_name,
       format,
       consolationFinal,
       grandFinalType,
       teams,
+      userId,
     });
     console.log(newBracket);
 
@@ -70,7 +85,8 @@ export async function GET() {
       );
     }
 
-    const brackets = await Bracket.find();
+    const brackets = await Bracket.find({ userId: session.user._id });
+
     return NextResponse.json(brackets, { status: 200 });
   } catch (error) {
     console.error("Error fetching brackets:", error);

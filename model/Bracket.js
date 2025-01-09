@@ -30,6 +30,11 @@ const bracketSchema = new mongoose.Schema({
       message: "Number of teams must be at least 4.",
     },
   },
+  userId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "UserModel",
+    required: true,
+  },
   createdAt: {
     type: Date,
     default: Date.now,

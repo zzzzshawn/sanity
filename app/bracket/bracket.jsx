@@ -10,9 +10,6 @@ import "brackets-viewer/dist/brackets-viewer.min.js";
 import "brackets-viewer/dist/brackets-viewer.min.css";
 import "./styles.css";
 
-const storage = new InMemoryDatabase();
-const manager = new BracketsManager(storage);
-
 export default function Bracket({
   teams,
   tournament_name,
@@ -20,6 +17,9 @@ export default function Bracket({
   consolationFinal,
   grandFinalType,
 }) {
+  const storage = new InMemoryDatabase();
+  const manager = new BracketsManager(storage);
+
   const [stageData, setStageData] = useState(null);
   const router = useRouter();
 
@@ -58,25 +58,6 @@ export default function Bracket({
   async function rerendering() {
     if (typeof window === "undefined" || !stageData) return;
 
-    // const bracketsViewerNode = document.querySelector(".brackets-viewer");
-    // bracketsViewerNode?.replaceChildren();
-
-    // window.bracketsViewer.onMatchClicked = async (match) => {
-    //   console.log("Match clicked", match);
-    //   try {
-    //     await manager.update.match({
-    //       id: match.id,
-    //       opponent1: { score: 5 },
-    //       opponent2: { score: 7, result: "win" },
-    //     });
-    //   } catch (error) {
-    //     console.error("Error during match update:", error);
-    //   }
-    //   const tourneyData2 = await manager.get.currentMatches(0);
-    //   const tourneyData = await manager.get.stageData(0);
-    //   setStageData(tourneyData);
-    // };
-
     window.bracketsViewer.setParticipantImages(
       stageData.participant.map((participant) => ({
         participantId: participant.id,
@@ -101,6 +82,10 @@ export default function Bracket({
             }
           }
         },
+        clear: true,
+        onMatchClick: (match) => {
+          console.log("Match clicked", match);
+        },
       },
     );
   }
@@ -113,17 +98,8 @@ export default function Bracket({
     rerendering();
   }, [stageData]);
 
-  function removeBracket() {
-    storage.reset();
-    manager.reset;
-    router.push("/bracket");
-  }
-
   return (
     <>
-      <Button onClick={removeBracket} className="mb-1">
-        Clear
-      </Button>
       <div className="brackets-viewer custom"></div>
     </>
   );
