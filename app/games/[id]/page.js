@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { games } from "../data/index";
-import { useState } from "react";
+import React, { useState } from "react";
 import { HeartFilledIcon, HeartIcon } from "@radix-ui/react-icons";
 import TournamentSection from "../../../components/TournamentSection";
 import { ListFilter } from "lucide-react";
@@ -17,7 +17,9 @@ import {
 export default function GamePage({ params }) {
   const [isFavourite, setIsFavourite] = useState(false);
 
-  const slug = params.id;
+  const unwrappedParams = React.use(params);
+
+  const slug = unwrappedParams.id;
 
   const game = games[slug - 1];
 
