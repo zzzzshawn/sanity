@@ -49,7 +49,7 @@ export async function GET(request) {
         .then((teams) =>
           teams.map((team) => ({
             ...team,
-            members: team.members || [],
+            players: team.players || [],
           })),
         ),
 
