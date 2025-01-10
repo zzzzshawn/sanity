@@ -142,7 +142,7 @@ export default function Dashboard() {
                   <p className="text-sm text-gray-300 mt-2 mb-3">
                     Registration Ends:{" "}
                     {new Date(
-                      tournament.registrationEndDate,
+                      tournament.tournamentDates.ended,
                     ).toLocaleDateString()}
                   </p>
                   <Link
@@ -170,7 +170,7 @@ export default function Dashboard() {
                 >
                   <h3 className="font-medium text-white/90">{team.teamName}</h3>
                   <p className="text-sm text-gray-300 mt-2 mb-3">
-                    Members: {team.members.length}
+                    Members: {team.members?.length}
                   </p>
                   <Link
                     href={`/teams/${team._id}`}
@@ -197,7 +197,9 @@ export default function Dashboard() {
                   key={bracket._id}
                   className="group relative bg-gray-700/50 p-4 rounded-lg hover:bg-gray-700/70 transition-all"
                 >
-                  <h3 className="font-medium text-white/90">{bracket.name}</h3>
+                  <p className="font-medium text-white/90">
+                    {bracket.tournamentName}
+                  </p>
                   <Link
                     href={`/brackets/${bracket._id}`}
                     className="inline-flex items-center  text-sm hover:text-gray-400 transition-colors mt-3"

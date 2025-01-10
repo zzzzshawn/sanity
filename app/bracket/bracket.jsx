@@ -3,7 +3,6 @@
 import { useState, useEffect } from "react";
 import { InMemoryDatabase } from "brackets-memory-db";
 import { BracketsManager } from "brackets-manager";
-import { Button } from "../../components/ui/button";
 import { useRouter } from "next/navigation";
 
 import "brackets-viewer/dist/brackets-viewer.min.js";

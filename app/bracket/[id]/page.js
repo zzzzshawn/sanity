@@ -4,8 +4,6 @@ import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import Bracket from "../Bracket";
 
-import NewBracket from "../../../components/NewBracket";
-
 import { PacmanLoader } from "react-spinners";
 
 const BracketTemplate = () => {
