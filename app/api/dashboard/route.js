@@ -6,7 +6,6 @@ import { TeamModel } from "../../../model/Team";
 import Tournament from "../../../model/Tournament";
 import Bracket from "../../../model/Bracket";
 
-
 export async function GET(request) {
   try {
     const session = await getServerSession(authOptions);
