@@ -7,6 +7,12 @@ const GamesSchema = new Schema({
   category: String,
   profile: String,
   gameBannerPhoto: String,
+  players: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: "UserModel",
+    },
+  ],
 });
 
 const Games = models.Games || model("Games", GamesSchema);
