@@ -1,6 +1,6 @@
 // model/Games.js
-const mongoose = require("mongoose");
-const Schema = mongoose.Schema;
+import { Schema as _Schema, models, model } from "mongoose";
+const Schema = _Schema;
 
 const GamesSchema = new Schema({
   name: { type: String, unique: true },
@@ -15,6 +15,6 @@ const GamesSchema = new Schema({
   ],
 });
 
-const Games = mongoose.models.Games || mongoose.model("Games", GamesSchema);
+const Games = models.Games || model("Games", GamesSchema);
 
-module.exports = Games;
+export default Games;
