@@ -68,7 +68,7 @@ const BracketList = () => {
                   </div>
                 )}
                 <h3 className="text-xl font-semibold mb-2">
-                  {bracket.tournamentName}
+                  {bracket.tournament_name}
                 </h3>
 
                 <p className="text-gray-600">
