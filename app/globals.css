@@ -28,21 +28,21 @@
 
   .dark {
     --background: #fff; /* Changed from dark color to white */
-    --foreground: 0 0% 98%; /* You can adjust this if needed */
+    --foreground: #000000; /* Changed to pure black */
     --card: #fff; /* Optional, if you want card backgrounds to be white */
-    --card-foreground: #000; /* Adjusted for contrast */
+    --card-foreground: #000000; /* Changed to pure black for contrast */
     --popover: #fff; /* Optional */
-    --popover-foreground: #000; /* Adjusted for contrast */
-    --primary: #000; /* You can keep this or adjust based on your design */
+    --popover-foreground: #000000; /* Changed to pure black for contrast */
+    --primary: #000000; /* Changed to pure black */
     --primary-foreground: #fff;
     --secondary: #f0f0f0; /* Adjust as needed */
-    --secondary-foreground: #000;
+    --secondary-foreground: #000000; /* Changed to pure black */
     --muted: #f0f0f0; /* Adjust as needed */
-    --muted-foreground: #000;
+    --muted-foreground: #000000; /* Changed to pure black */
     --accent: #f0f0f0; /* Adjust as needed */
-    --accent-foreground: #000;
+    --accent-foreground: #000000; /* Changed to pure black */
     --destructive: #ffcccc; /* Adjust as needed for visibility */
-    --destructive-foreground: #000;
+    --destructive-foreground: #000000; /* Changed to pure black */
     --border: #e1e1e1; /* Adjust for visibility */
     --input: #f9f9f9; /* Adjust as needed */
     --ring: #ccc; /* Adjust as needed for visibility */
