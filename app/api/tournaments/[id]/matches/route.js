@@ -13,8 +13,6 @@ export async function GET(request, { params }) {
       "stage.tournament_id": id,
     }).lean();
 
-    console.log(bracket);
-
     if (!bracket) {
       return NextResponse.json(
         { error: "No matches found for this tournament" },
