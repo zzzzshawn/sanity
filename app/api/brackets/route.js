@@ -1,80 +1,60 @@
 import dbConnect from "../../../lib/dbConnect";
-import mongoose from "mongoose";
 import Bracket from "../../../model/Bracket";
 import { TeamModel } from "../../../model/Team";
 import { NextResponse } from "next/server";
 import Tournament from "../../../model/Tournament";
-import { z } from "zod";
-import { InMemoryDatabase } from "brackets-memory-db";
-import { BracketsManager } from "brackets-manager";
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "../../../lib/authOptions";
 
-const bracketSchema = z.object({
-  tournament_name: z.string().min(1),
-  format: z.enum(["single_elimination", "double_elimination"]),
-  consolationFinal: z.boolean().default(false),
-  grandFinalType: z.enum(["simple", "double"]),
-  teams: z.array(z.string().min(1)).min(4, "At least 4 teams are required"),
-});
-
 export async function POST(request) {
-  const storage = new InMemoryDatabase();
-  const manager = new BracketsManager(storage);
-
   try {
     await dbConnect();
     const body = await request.json();
-    const validation = bracketSchema.safeParse(body);
 
-    if (!validation.success) {
-      return NextResponse.json(validation.error.format(), { status: 400 });
+    const session = await getServerSession(authOptions);
+
+    if (!session || !session.user) {
+      return new NextResponse(
+        JSON.stringify({ success: false, message: "Unauthorized" }),
+        { status: 401 },
+      );
     }
 
     const { tournament_name, format, consolationFinal, grandFinalType, teams } =
-      validation.data;
+      body;
 
-    const tournamentId = new mongoose.Types.ObjectId();
+    const userId = session.user._id;
 
-    await manager.create.stage({
-      tournamentId,
-      name: tournament_name,
-      type: format,
-      seeding: teams,
-      settings: {
-        consolationFinal,
-        grandFinal: grandFinalType,
-      },
-    });
+    if (
+      !tournament_name ||
+      !format ||
+      !grandFinalType ||
+      typeof consolationFinal !== "boolean" ||
+      !teams ||
+      teams.length < 4
+    ) {
+      return NextResponse.json(
+        {
+          error:
+            "Invalid input: Ensure all fields are filled and at least 4 teams are provided.",
+        },
+        { status: 400 },
+      );
+    }
 
-    const participants = teams.map((team, index) => ({
-      id: new mongoose.Types.ObjectId(),
-      name: team,
-      tournament_id: tournamentId,
-    }));
-
-    const updatedStage = storage.data.stage.map((stage) => ({
-      ...stage,
-      id: new mongoose.Types.ObjectId(),
-      tournament_id: tournamentId,
-    }));
+    console.log("UserId", session.user._id);
 
     const newBracket = new Bracket({
-      tournamentName: tournament_name,
-      format: format,
-      participant: participants,
-      stage: updatedStage,
-      round: storage.data.round,
-      group: storage.data.group,
-      match: storage.data.match,
+      tournament_name,
+      format,
+      consolationFinal,
+      grandFinalType,
+      teams,
+      userId,
     });
-
-    // console.log(newBracket);
+    console.log(newBracket);
 
     await newBracket.save();
-
-    // cleanup
-    await manager.delete.tournament(tournamentId);
 
     return NextResponse.json(
       { message: "Bracket created successfully", id: newBracket._id },
@@ -105,35 +85,9 @@ export async function GET() {
       );
     }
 
-    const userId = session.user._id; // Extract user ID from session
-    const userTeams = await TeamModel.find({ players: userId });
+    const brackets = await Bracket.find({ userId: session.user._id });
 
-    if (!userTeams.length) {
-      return new NextResponse(
-        JSON.stringify({
-          success: true,
-          data: [],
-          message: "No teams found for this user",
-        }),
-        { status: 200 },
-      );
-    }
-
-    const teamIds = userTeams.map((team) => team._id);
-
-    const tournaments = await Tournament.find({
-      "teamsRegistered.id": { $in: teamIds },
-    });
-
-    const tournamentNames = tournaments.map((t) => t.tournamentName);
-
-    const brackets = await Bracket.find({
-      tournamentName: { $in: tournamentNames },
-    }).sort({ createdAt: -1 });
-
-    const responseBrackets = Array.isArray(brackets) ? brackets : [];
-
-    return NextResponse.json(responseBrackets, { status: 200 });
+    return NextResponse.json(brackets, { status: 200 });
   } catch (error) {
     console.error("Error fetching brackets:", error);
     return new NextResponse(

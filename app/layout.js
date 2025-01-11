@@ -57,7 +57,7 @@ export default function RootLayout({ children }) {
       <html lang="en" suppressHydrationWarning>
         <body className={helvetica.className}>
           <Provider>
-            <main className="mx-auto ">{children}</main>
+            <main className="mx-auto mt-10">{children}</main>
           </Provider>
         </body>
       </html>

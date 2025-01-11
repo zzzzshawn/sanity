@@ -13,6 +13,7 @@ const News = () => {
   const [newsUrl, setNewsUrl] = useState("");
 
   axiosRetry(axios, { retries: 3, retryDelay: axiosRetry.exponentialDelay });
+
   useEffect(() => {
     const fetchNewsUrl = async () => {
       try {
