@@ -60,7 +60,7 @@ const News = () => {
   const renderNewsSlider = (title, articles, category) => (
     <div className="mb-16 mt-2 h-fit">
       {/* Title Section */}
-      <div className="uppercase text-white text-center text-2xl md:text-3xl h-fit font-semibold flex justify-center items-center">
+      <div className="uppercase  text-center text-2xl md:text-3xl h-fit font-semibold flex justify-center items-center">
         {title}
       </div>
 
@@ -68,7 +68,7 @@ const News = () => {
       <div className="w-full flex justify-center mt-4 h-fit">
         {isLoading ? (
           <div className="flex justify-center items-center h-40">
-            <PacmanLoader color="white" />
+            <PacmanLoader color="yellow" />
           </div>
         ) : (
           <div
