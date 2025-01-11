@@ -78,6 +78,14 @@ const TournamentSchema = new Schema(
     selectedTimezone: String,
     size: String,
     brackets: [{ type: mongoose.Schema.Types.ObjectId, ref: "Bracket" }],
+
+    // Relation with the User model
+    participants: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "UserModel",
+      },
+    ],
   },
   { timestamps: true },
 );
