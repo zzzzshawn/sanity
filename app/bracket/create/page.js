@@ -112,7 +112,7 @@ export default function Page() {
     const res = { ...bracketInfo, teams };
     setInfo(res);
 
-    sendBrackets({
+    const success = sendBrackets({
       tournament_name: res.tournament_name,
       format: res.format,
       consolationFinal: res.consolationFinal,
@@ -122,11 +122,9 @@ export default function Page() {
 
     // console.log("Bracket Info", JSON.stringify(info, null, 2));
 
-    if (!showBrackets) {
+    if (success && !showBrackets) {
       setShowBrackets(true);
     }
-
-    toast.success("Bracket created successfully");
   }
 
   return (
