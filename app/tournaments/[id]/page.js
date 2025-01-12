@@ -15,7 +15,7 @@ import {
   fetchTournamentData,
   registerForTournament,
 } from "../../../lib/api/tournament";
-import { PacmanLoader } from "react-spinners";
+import Pacman from "../../loading";
 import { toast } from "sonner";
 
 export default function TournamentPage({ params }) {
@@ -58,11 +58,7 @@ export default function TournamentPage({ params }) {
   };
 
   if (loading) {
-    return (
-      <div className="flex w-full h-screen justify-center items-center">
-        <PacmanLoader color="white" />
-      </div>
-    );
+    return <Pacman />;
   }
 
   if (error) {

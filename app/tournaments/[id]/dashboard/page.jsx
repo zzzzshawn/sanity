@@ -19,7 +19,7 @@ import {
   CardTitle,
 } from "../../../../@/components/ui/card";
 import { Badge } from "../../../../@/components/ui/badge";
-import { PacmanLoader } from "react-spinners";
+import Pacman from "@/app/loading";
 
 export default function TournamentDashboard({ params }) {
   const [tournament, setTournament] = useState(null);
@@ -52,11 +52,7 @@ export default function TournamentDashboard({ params }) {
   }, [unwrappedParams.id]);
 
   if (loading) {
-    return (
-      <div className="flex w-full h-screen justify-center items-center ">
-        <PacmanLoader color="white" />
-      </div>
-    );
+    return <Pacman />;
   }
 
   if (error) {

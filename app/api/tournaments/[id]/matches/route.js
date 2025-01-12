@@ -7,12 +7,12 @@ export async function GET(request, { params }) {
   try {
     await dbConnect();
     const { id } = await params;
-  if (!mongoose.Types.ObjectId.isValid(id)) {
-   return NextResponse.json(
-    { error: "Invalid tournament ID format" },
-     { status: 400 }
-   );
- }
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      return NextResponse.json(
+        { error: "Invalid tournament ID format" },
+        { status: 400 },
+      );
+    }
     // Find bracket where stage has the matching tournament_id
     const bracket = await Bracket.findOne({
       "stage.tournament_id": id,

@@ -3,7 +3,8 @@
 import { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { PacmanLoader } from "react-spinners";
+import Pacman from "../app/loading";
+
 export default function TournamentSection({ filters }) {
   const [tournaments, setTournaments] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -30,11 +31,7 @@ export default function TournamentSection({ filters }) {
   }, []);
 
   if (isLoading) {
-    return (
-      <div className="flex w-full h-screen justify-center items-center">
-        <PacmanLoader color="white" />
-      </div>
-    );
+    return <Pacman />;
   }
   if (error) return <div>Error: {error}</div>;
 
