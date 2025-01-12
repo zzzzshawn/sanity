@@ -45,7 +45,8 @@ const TournamentPage = () => {
               Gaming Tournaments
             </h1>
             <p className="text-gray-400 text-lg max-w-2xl">
-              Join competitive gaming tournaments, compete with the best, and win exciting prizes
+              Join competitive gaming tournaments, compete with the best, and
+              win exciting prizes
             </p>
           </div>
 
