@@ -1,6 +1,9 @@
 import { fontFamily } from "tailwindcss/defaultTheme";
+const defaultTheme = require("tailwindcss/defaultTheme");
 
 import flattenColorPalette from "tailwindcss/lib/util/flattenColorPalette";
+
+const svgToDataUri = require("mini-svg-data-uri");
 
 function addVariablesForColors({ addBase, theme }) {
   let allColors = flattenColorPalette(theme("colors"));
@@ -66,7 +69,7 @@ module.exports = {
         },
       },
       fontFamily: {
-        sans: ["var(--font-helvetica)", ...fontFamily.sans],
+        mono: ["var(--font-helvetica)", ...fontFamily.mono],
       },
       keyframes: {
         "accordion-down": {
@@ -95,6 +98,18 @@ module.exports = {
   },
   plugins: [
     require("tailwindcss-animate"), // Add the tailwindcss-animate plugin
-    addVariablesForColors, // Your custom plugin for color variables
+    addVariablesForColors,
+    function ({ matchUtilities, theme }: any) {
+      matchUtilities(
+        {
+          "bg-dot-thick": (value: any) => ({
+            backgroundImage: `url("${svgToDataUri(
+              `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="16" height="16" fill="none"><circle fill="${value}" id="pattern-circle" cx="10" cy="10" r="2.5"></circle></svg>`
+            )}")`,
+          }),
+        },
+        { values: flattenColorPalette(theme("backgroundColor")), type: "color" }
+      );
+    }, // Your custom plugin for color variables
   ],
 };

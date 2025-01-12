@@ -36,7 +36,7 @@ const BracketList = () => {
   if (isLoading)
     return (
       <div className="flex w-full h-screen justify-center items-center">
-        <PacmanLoader color="white" />
+        <PacmanLoader color="yellow" />
       </div>
     );
   if (error) return <div className="pt-3">Error: {error}</div>;

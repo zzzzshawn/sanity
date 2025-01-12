@@ -108,7 +108,7 @@ const News = () => {
   if (isLoading) {
     return (
       <div className="flex h-[600px] items-center justify-center">
-        <PacmanLoader color="white" />
+        <PacmanLoader color="yellow" />
       </div>
     );
   }

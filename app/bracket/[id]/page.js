@@ -41,7 +41,7 @@ const BracketTemplate = () => {
   if (loading) {
     return (
       <div className="flex w-full h-screen justify-center items-center">
-        <PacmanLoader color="white" />
+        <PacmanLoader color="yellow" />
       </div>
     );
   }
