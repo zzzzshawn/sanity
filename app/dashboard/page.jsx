@@ -74,7 +74,7 @@ export default function Dashboard() {
   if (status === "loading" || isLoading) {
     return (
       <div className="flex w-full h-screen justify-center items-center ">
-        <PacmanLoader color="white" />
+        <PacmanLoader color="yellow" />
       </div>
     );
   }
