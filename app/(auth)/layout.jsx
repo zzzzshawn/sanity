@@ -1,22 +1,35 @@
-import Image from "next/image";
-import { AuroraBackground } from "../../@/components/ui/aurora-background.jsx";
+"use client";
+
 import React from "react";
+import { motion } from "framer-motion";
+import { AuroraBackground } from "../../@/components/ui/aurora-background";
 
 export default function AuthLayout({ children }) {
   return (
-    <div className="flex border h-[90vh] -mt-8 w-[98%] mx-auto rounded-2xl bg-zinc-400/10 border-zinc-200/20 backdrop-blur-lg backdrop-saturate-200">
-      {/* First half */}
-      <div className="w-1/2 relative p-2 flex items-center justify-center max-md:hidden">
-        <AuroraBackground>
-          <h2 className="text-7xl m-5 font-bold pointer-events-none whitespace-pre-wrap bg-gradient-to-b from-white/90 via-white/70 to-zinc-800 bg-clip-text leading-none text-transparent max-sm:text-3xl max-sm:text-center p-2 text-center">
-            Sanity
-          </h2>
-        </AuroraBackground>
-      </div>
-      {/* Second half */}
-      <div className="w-1/2 max-md:w-full relative p-2 flex items-center justify-center">
-        {children}
-      </div>
+    <div>
+      <AuroraBackground>
+        <div className="flex border h-[90vh] -mt-8 w-[98%] mx-auto rounded-2xl  border-zinc-200/20 ">
+          <div className="w-1/2 relative p-2 flex items-center justify-center max-md:hidden">
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{
+                delay: 0.3,
+                duration: 0.8,
+                ease: "easeInOut",
+              }}
+              className="relative flex flex-col gap-4 items-center justify-center px-4"
+            >
+              <div className="text-4xl md:text-4xl lg:text-6xl font-semibold max-w-7xl mx-auto text-center relative z-20 pb-2 bg-clip-text text-transparent bg-gradient-to-b from-neutral-800 via-neutral-700 to-neutral-700 dark:from-neutral-800 dark:via-white dark:to-white">
+                Welcome to Sanity
+              </div>
+            </motion.div>
+          </div>
+          <div className="w-1/2 max-md:w-full relative p-2 flex items-center justify-center">
+            {children}
+          </div>
+        </div>
+      </AuroraBackground>
     </div>
   );
 }

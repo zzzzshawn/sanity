@@ -1,12 +1,12 @@
 "use client";
 
 import Link from "next/link";
-import Image from "next/image";
 import { motion } from "framer-motion";
-import { Vortex } from "../@/components/ui/vortex";
+import { HeroHighlight } from "../@/components/ui/hero";
 
-export default function HeroSection() {
+export default function HeroSection({}) {
   return (
+    // <HeroHighlight>
     <motion.section
       className="flex flex-col lg:py-20"
       initial={{ opacity: 0, y: 50 }}
@@ -14,18 +14,18 @@ export default function HeroSection() {
       transition={{ duration: 0.8, delay: 0.4 }}
     >
       {/* <Vortex> */}
-      <div className="text-center max-w-4xl mx-auto space-y-6">
-        <div className="flex items-center  gap-2 w-fit mx-auto px-4 py-1.5  rounded-full text-sm font-medium border border-neutral-700">
+      <div className="text-center max-w-4xl mx-auto space-y-6 pb-10">
+        <div className="flex items-center  gap-2 w-fit mx-auto px-4 py-2  rounded-full text-sm font-medium border border-neutral-700">
           <h2 className="bg-gradient-to-r bg-clip-text text-transparent from-gray-600 via-gray-600 to-gray-600 dark:from-neutral-500 dark:via-white dark:to-white ">
             Discover new heights
           </h2>
         </div>
 
-        <h1 className="text-4xl md:text-4xl lg:text-6xl font-semibold max-w-7xl mx-auto text-center relative z-20  bg-clip-text text-transparent bg-gradient-to-b from-neutral-800 via-neutral-700 to-neutral-700 dark:from-neutral-800 dark:via-white dark:to-white">
+        <h1 className="text-4xl md:text-4xl lg:text-6xl font-semibold max-w-7xl mx-auto text-center relative z-20  bg-clip-text text-transparent bg-gradient-to-b from-neutral-700 via-neutral-700 to-neutral-700 dark:from-neutral-800 dark:via-slate-300 dark:to-slate-300 ">
           Compete like never before in the ultimate esports tournaments!{" "}
         </h1>
 
-        <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+        <p className="text-xl text-muted-foreground max-w-2xl mx-auto text-slate-200">
           Sanity is a suite of powerful tools for organizers, agencies, studios
           and publishers to manage and showcase their tournaments.
         </p>
@@ -50,22 +50,11 @@ export default function HeroSection() {
         </div>
       </div>
       {/* </Vortex> */}
-
-      <motion.div
-        className="mt-20"
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.6 }}
-      >
-        <Image
-          src="/hero.jpg"
-          height={1000}
-          width={1200}
-          className="rounded-2xl shadow-2xl mx-auto w-11/12 md:w-3/4"
-          alt="Sanity Esports Hero"
-          priority
-        />
-      </motion.div>
+{/* 
+      <div className="mt-20">
+        
+      </div> */}
     </motion.section>
+// </HeroHighlight>
   );
 }
