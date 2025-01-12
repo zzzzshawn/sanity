@@ -18,7 +18,7 @@ import {
   TabsTrigger,
 } from "../../@/components/ui/tabs";
 import { Button } from "../../@/components/ui/button";
-import { PacmanLoader } from "react-spinners";
+import Pacman from "../loading";
 import { Plus, PlusCircle } from "lucide-react";
 
 const TeamFinder = () => {
@@ -86,11 +86,7 @@ const TeamFinder = () => {
     setFilteredTeams(filteredArray);
   }
   if (loading) {
-    return (
-      <div className="flex w-full h-screen justify-center items-center">
-        <PacmanLoader color="yellow" />
-      </div>
-    );
+    return <Pacman />;
   }
 
   if (error) {

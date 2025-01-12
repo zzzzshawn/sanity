@@ -2,8 +2,8 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import axiosRetry from "axios-retry";
-import { PacmanLoader } from "react-spinners";
 import { Newspaper, Gamepad2, Trophy, Flame } from "lucide-react";
+import Pacman from "@/app/loading";
 
 const News = () => {
   const [latestNews, setLatestNews] = useState([]);
@@ -106,11 +106,7 @@ const News = () => {
   );
 
   if (isLoading) {
-    return (
-      <div className="flex h-[600px] items-center justify-center">
-        <PacmanLoader color="yellow" />
-      </div>
-    );
+    return <Pacman />;
   }
 
   const distributeArticles = (articles, category, icon) => {

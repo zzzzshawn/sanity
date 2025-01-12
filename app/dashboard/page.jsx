@@ -2,7 +2,7 @@
 import { useState, useEffect } from "react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import { PacmanLoader } from "react-spinners";
+import Pacman from "../loading";
 import {
   Card,
   CardContent,
@@ -72,11 +72,7 @@ export default function Dashboard() {
   };
 
   if (status === "loading" || isLoading) {
-    return (
-      <div className="flex w-full h-screen justify-center items-center ">
-        <PacmanLoader color="yellow" />
-      </div>
-    );
+    return <Pacman />;
   }
 
   if (!session) {

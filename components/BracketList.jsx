@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { PacmanLoader } from "react-spinners";
+import Pacman from "../app/loading";
 
 const BracketList = () => {
   const [brackets, setBrackets] = useState([]);
@@ -33,12 +33,8 @@ const BracketList = () => {
 
   console.log(brackets);
 
-  if (isLoading)
-    return (
-      <div className="flex w-full h-screen justify-center items-center">
-        <PacmanLoader color="yellow" />
-      </div>
-    );
+  if (isLoading) return <Pacman />;
+  
   if (error) return <div className="pt-3">Error: {error}</div>;
 
   return (

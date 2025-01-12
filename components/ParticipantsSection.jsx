@@ -14,7 +14,7 @@ import { Alert, AlertDescription } from "../@/components/ui/alert";
 import { Input } from "../@/components/ui/input";
 import { Badge } from "../@/components/ui/badge";
 import { Card, CardHeader, CardContent } from "../@/components/ui/card";
-import { PacmanLoader } from "react-spinners";
+import Pacman from "../app/loading";
 
 const ParticipantsSection = ({ id }) => {
   const [participants, setParticipants] = useState([]);
@@ -67,11 +67,7 @@ const ParticipantsSection = ({ id }) => {
   });
 
   if (loading) {
-    return (
-      <div className="flex w-full h-screen justify-center items-center">
-        <PacmanLoader color="yellow" />
-      </div>
-    );
+    return <Pacman />;
   }
 
   if (!tournamentExists) {
