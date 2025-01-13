@@ -34,7 +34,7 @@ export default function TournamentSection({ filters }) {
     const status = getStatus(tournament.tournamentDates);
     const entryFee =
       tournament.prize?.length > 0
-        ? tournament.prize[0].amount === 0
+        ? tournament.prize[0]?.amount === 0
           ? "free"
           : "paid"
         : "";
