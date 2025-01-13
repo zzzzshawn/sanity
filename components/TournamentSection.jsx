@@ -170,9 +170,9 @@ const TournamentCard = ({
 };
 
 function getStatus(dates) {
-  const now = new Date();
-  const startDate = new Date(dates.started);
-  const endDate = new Date(dates.ended);
+  const now = new Date().toISOString();
+  const startDate = new Date(dates.started).toISOString();
+  const endDate = new Date(dates.ended).toISOString();
 
   if (now < startDate) return "Open";
   if (now >= startDate && now <= endDate) return "Live";
