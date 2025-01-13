@@ -34,7 +34,7 @@ const BracketList = () => {
   console.log(brackets);
 
   if (isLoading) return <Pacman />;
-  
+
   if (error) return <div className="pt-3">Error: {error}</div>;
 
   return (

@@ -50,11 +50,11 @@ export default function HeroSection({}) {
         </div>
       </div>
       {/* </Vortex> */}
-{/* 
+      {/* 
       <div className="mt-20">
         
       </div> */}
     </motion.section>
-// </HeroHighlight>
+    // </HeroHighlight>
   );
 }
