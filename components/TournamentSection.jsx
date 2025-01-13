@@ -74,7 +74,7 @@ export default function TournamentSection({ filters }) {
       )}
     </div>
   );
-};
+}
 
 const TournamentCard = ({
   tournamentName,
@@ -178,4 +178,3 @@ function getStatus(dates) {
   if (now >= startDate && now <= endDate) return "Live";
   return "Completed";
 }
-
