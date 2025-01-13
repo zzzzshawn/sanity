@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import axiosRetry from "axios-retry";
 import { Newspaper, Gamepad2, Trophy, Flame } from "lucide-react";
-import Pacman from "@/app/loading";
+import Pacman from "../app/loading";
 
 const News = () => {
   const [latestNews, setLatestNews] = useState([]);

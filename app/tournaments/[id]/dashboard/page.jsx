@@ -19,7 +19,7 @@ import {
   CardTitle,
 } from "../../../../@/components/ui/card";
 import { Badge } from "../../../../@/components/ui/badge";
-import Pacman from "@/app/loading";
+import Pacman from "../../../loading";
 
 export default function TournamentDashboard({ params }) {
   const [tournament, setTournament] = useState(null);
