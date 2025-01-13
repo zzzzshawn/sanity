@@ -179,4 +179,3 @@ function getStatus(dates) {
   return "Completed";
 }
 
-export default TournamentSection;
