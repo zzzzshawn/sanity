@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from "react";
 import { Card, CardContent } from "./ui/card";
 import { motion, AnimatePresence } from "framer-motion";
-import { PacmanLoader } from "react-spinners";
+import Pacman from "../app/loading";
 
 const TournamentBracket = ({ matches, roundNames }) => {
   const [rounds, setRounds] = useState([]);
@@ -36,11 +36,7 @@ const TournamentBracket = ({ matches, roundNames }) => {
   };
 
   if (loading) {
-    return (
-      <div className="flex w-full h-screen justify-center items-center">
-        <PacmanLoader color="white" />
-      </div>
-    );
+    return <Pacman />;
   }
 
   if (error) {
