@@ -1,18 +1,21 @@
 "use client";
 
 import Image from "next/image";
+import { ContainerScroll } from "../@/components/ui/container-scroll-animation";
 
 export default function Dashboard() {
   return (
-    <div className="container mx-auto px-4 py-20">
-      <Image
-        src="/hero.jpg"
-        height={1000}
-        width={1200}
-        className="rounded-2xl shadow-2xl mx-auto w-11/12 md:w-3/4"
-        alt="Sanity Esports Hero"
-        priority
-      />
+    <div className="flex flex-col overflow-hidden">
+      <ContainerScroll>
+        <Image
+          src={`/hero.jpg`}
+          alt="hero"
+          height={720}
+          width={1400}
+          className="mx-auto rounded-2xl object-cover h-full object-left-top"
+          draggable={false}
+        />
+      </ContainerScroll>
     </div>
   );
 }

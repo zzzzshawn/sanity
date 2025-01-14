@@ -20,7 +20,7 @@ import { useSession } from "next-auth/react";
 import UserProfile from "../components/UserProfile";
 import { LogoutButton } from "./LogoutButton";
 import { BiExit } from "react-icons/bi";
-import { ThemeModeToggle } from "../components/ThemeModeToggle";
+// import { ThemeModeToggle } from "../components/ThemeModeToggle";
 
 const Navbar = () => {
   const session = useSession();
@@ -126,7 +126,7 @@ const Navbar = () => {
             </button>
           </Link>
         )}
-        <ThemeModeToggle />
+        {/* <ThemeModeToggle /> */}
       </div>
 
       {/* mobile nav menu */}
@@ -182,7 +182,7 @@ const Navbar = () => {
             </SheetContent>
           </Sheet>
         </div>
-        <ThemeModeToggle />
+        {/* <ThemeModeToggle /> */}
       </div>
     </div>
   );
