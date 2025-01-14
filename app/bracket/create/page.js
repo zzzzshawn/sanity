@@ -24,7 +24,9 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
 import { FaArrowLeftLong } from "react-icons/fa6";
 import { useRouter } from "next/navigation";
-import Bracket from "../Bracket";
+import dynamic from "next/dynamic";
+
+const Bracket = dynamic(() => import("../Bracket"), { ssr: false }); // to avoid ssr while build time
 
 const bracketSchema = z.object({
   tournament_name: z.string().min(1),
