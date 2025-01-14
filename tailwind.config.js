@@ -1,8 +1,7 @@
 import { fontFamily } from "tailwindcss/defaultTheme";
-const defaultTheme = require("tailwindcss/defaultTheme");
-
 import flattenColorPalette from "tailwindcss/lib/util/flattenColorPalette";
 
+const defaultTheme = require("tailwindcss/defaultTheme");
 const svgToDataUri = require("mini-svg-data-uri");
 
 function addVariablesForColors({ addBase, theme }) {
