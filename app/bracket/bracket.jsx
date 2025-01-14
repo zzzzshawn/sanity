@@ -4,23 +4,33 @@ import { useState, useEffect } from "react";
 import { InMemoryDatabase } from "brackets-memory-db";
 import { BracketsManager } from "brackets-manager";
 import { useRouter } from "next/navigation";
+import dynamic from "next/dynamic";
 
-import "brackets-viewer/dist/brackets-viewer.min.js";
-import "brackets-viewer/dist/brackets-viewer.min.css";
-import "./styles.css";
-
-export default function Bracket({
+const BracketComponent = ({
   teams,
   tournament_name,
   format,
   consolationFinal,
   grandFinalType,
-}) {
+}) => {
   const storage = new InMemoryDatabase();
   const manager = new BracketsManager(storage);
 
   const [stageData, setStageData] = useState(null);
+  const [isMounted, setIsMounted] = useState(false);
   const router = useRouter();
+
+  useEffect(() => {
+    import("brackets-viewer/dist/brackets-viewer.min.css");
+    import("./styles.css");
+
+    import("brackets-viewer/dist/brackets-viewer.min.js").then(() => {
+      setIsMounted(true);
+      rendering();
+    });
+
+    return () => setIsMounted(false);
+  }, []);
 
   async function rendering() {
     if (!teams) return;
@@ -55,7 +65,7 @@ export default function Bracket({
   }
 
   async function rerendering() {
-    if (typeof window === "undefined" || !stageData) return;
+    if (!isMounted || !stageData || typeof window === "undefined") return;
 
     window.bracketsViewer.setParticipantImages(
       stageData.participant.map((participant) => ({
@@ -90,16 +100,18 @@ export default function Bracket({
   }
 
   useEffect(() => {
-    rendering();
-  }, []);
-
-  useEffect(() => {
-    rerendering();
-  }, [stageData]);
+    if (isMounted) {
+      rerendering();
+    }
+  }, [stageData, isMounted]);
 
   return (
     <>
       <div className="brackets-viewer custom"></div>
     </>
   );
-}
+};
+
+export default dynamic(() => Promise.resolve(BracketComponent), {
+  ssr: false,
+});
