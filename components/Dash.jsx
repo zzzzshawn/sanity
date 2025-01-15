@@ -9,7 +9,6 @@ import {
 } from "framer-motion";
 import { FiMapPin } from "react-icons/fi";
 import { useRef } from "react";
-import centerImage from "../public/center.jpg";
 
 export const Dashboard = () => {
   return (
@@ -39,9 +38,7 @@ const Hero = () => {
       className="relative w-full"
     >
       <CenterImage />
-
       <ParallaxImages />
-
       <div className="absolute bottom-0 left-0 right-0 h-96 bg-gradient-to-b from-zinc-950/0 to-zinc-950" />
     </div>
   );
@@ -73,7 +70,7 @@ const CenterImage = () => {
         clipPath,
         backgroundSize,
         opacity,
-        backgroundImage: `url(${centerImage})`,
+        backgroundImage: `url(/center.jpg)`,
         backgroundPosition: "center",
         backgroundRepeat: "no-repeat",
       }}
@@ -152,7 +149,7 @@ const Schedule = () => {
   return (
     <section
       id="launch-schedule"
-      className="mx-auto max-w-5xl px-4 py-48 text-white"
+      className="mx-auto max-w-5xl px-4 py-28 text-white"
     >
       <motion.h1
         initial={{ y: 48, opacity: 0 }}
