@@ -1,5 +1,5 @@
 import HeroSection from "../components/HeroSection";
-import Dashboard from "../components/Dash";
+import { Dashboard } from "../components/Dash";
 import FeatureSection from "../components/FeatureSection/FeatureSection";
 import FaqSection from "../components/FaqSection";
 import { HeroHighlight } from "../@/components/ui/hero";

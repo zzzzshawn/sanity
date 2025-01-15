@@ -2,14 +2,23 @@
 @tailwind components;
 @tailwind utilities;
 
-body {
-  background: #000;
-  color: #fff;
+@layer base {
+  html {
+    background-color: hsl(
+      var(--background)
+    ); /* Use a variable or Tailwind color */
+  }
+
+  body {
+    background-color: #000000; /* override the background color */
+    color: hsl(var(--foreground)); /*tailwind color */
+  }
 }
 
 html {
   scroll-behavior: smooth;
 }
+
 .container {
   overflow: hidden;
 }

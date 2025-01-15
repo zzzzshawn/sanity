@@ -91,11 +91,11 @@ export default function Bracket({
 
   useEffect(() => {
     rendering();
-  }, []);
+  }, [rendering]);
 
   useEffect(() => {
     rerendering();
-  }, [stageData]);
+  }, [stageData, rerendering]);
 
   return (
     <>
