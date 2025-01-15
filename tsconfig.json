@@ -26,6 +26,7 @@
     "next-env.d.ts",
     ".next/types/**/*.ts",
     "**/*.ts",
+    "**/*.d.ts",
     "**/*.tsx",
     "middleware.ts",
     "app/(auth)/sign-in/page.jsx",
@@ -37,5 +38,5 @@
     "components/UserProfile.jsx",
     "components/LogoutButton.jsx"
   ],
-  "exclude": ["node_modules"]
+  "exclude": ["node_modules", "dist", "lib"]
 }
