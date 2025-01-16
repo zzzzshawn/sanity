@@ -26,7 +26,7 @@ import { FaArrowLeftLong } from "react-icons/fa6";
 import { useRouter } from "next/navigation";
 import dynamic from "next/dynamic";
 
-const Bracket = dynamic(() => import("../Bracket"), { ssr: false }); // to avoid ssr while build time
+const Bracket = dynamic(() => import("../bracket"), { ssr: false }); // to avoid ssr while build time
 
 const bracketSchema = z.object({
   tournament_name: z.string().min(1),

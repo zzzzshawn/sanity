@@ -2,7 +2,7 @@
 
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
-import Bracket from "../Bracket";
+import Bracket from "../bracket";
 import { toast } from "sonner";
 import Pacman from "../../loading";
 import { Button } from "../../../components/ui/button";
