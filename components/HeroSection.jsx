@@ -13,7 +13,6 @@ export default function HeroSection({}) {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8, delay: 0.4 }}
       >
-        {/* <Vortex> */}
         <div className="text-center max-w-4xl mx-auto space-y-6 pb-10">
           <div className="flex items-center  gap-2 w-fit mx-auto px-4 py-2  rounded-full text-sm font-medium border border-neutral-700">
             <h2 className="bg-gradient-to-r bg-clip-text text-transparent from-gray-600 via-gray-600 to-gray-600 dark:from-neutral-500 dark:via-white dark:to-white ">
