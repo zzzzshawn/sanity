@@ -80,7 +80,7 @@ const CenterImage = () => {
 
 const ParallaxImages = () => {
   return (
-    <div className="mx-auto max-w-5xl px-4 pt-[200px]">
+    <div className="mx-auto max-w-6xl px-4 pt-[200px]">
       <ParallaxImg
         src="/parallax5.jpg"
         alt="And example of a space launch"
@@ -93,7 +93,7 @@ const ParallaxImages = () => {
         alt="And example of a space launch"
         start={-200}
         end={200}
-        className="w-1/3"
+        className="w-1/4"
       />
       <ParallaxImg
         src="/parallax2.jpg"
