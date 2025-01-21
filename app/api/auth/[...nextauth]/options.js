@@ -1,5 +1,6 @@
 const GoogleProvider = require("next-auth/providers/google").default;
 const DiscordProvider = require("next-auth/providers/discord").default;
+const LinkedInProvider = require("next-auth/providers/linkedin").default;
 const bcrypt = require("bcryptjs");
 const UserModel = require("../../../../model/User").default;
 const dbConnect = require("../../../../lib/dbConnect");
@@ -22,6 +23,10 @@ const authOptions = {
       clientId: env.DISCORD_CLIENT_ID,
       clientSecret: env.DISCORD_CLIENT_SECRET,
       authorization: { params: { scope: "identify email" } },
+    }),
+    LinkedInProvider({
+      clientId: env.LINKEDIN_CLIENT_ID,
+      clientSecret: env.LINKEDIN_CLIENT_SECRET,
     }),
     CredentialsProvider({
       id: "credentials",
