@@ -36,7 +36,8 @@
     "app/(auth)/layout.jsx",
     "model/User.ts",
     "components/UserProfile.jsx",
-    "components/LogoutButton.jsx"
+    "components/LogoutButton.jsx",
+    "components/SkeletonTwo.jsx"
   ],
   "exclude": ["node_modules", "dist", "lib"]
 }

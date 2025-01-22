@@ -7,7 +7,6 @@ import { Button } from "../components/ui/button";
 import {
   Sheet,
   SheetContent,
-  SheetDescription,
   SheetFooter,
   SheetHeader,
   SheetTitle,
@@ -20,7 +19,6 @@ import { useSession } from "next-auth/react";
 import UserProfile from "../components/UserProfile";
 import { LogoutButton } from "./LogoutButton";
 import { BiExit } from "react-icons/bi";
-// import { ThemeModeToggle } from "../components/ThemeModeToggle";
 
 const Navbar = () => {
   const session = useSession();

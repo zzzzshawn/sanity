@@ -27,7 +27,7 @@ import {
 } from "../../../@/components/ui/card";
 import { FaDiscord, FaGoogle } from "react-icons/fa";
 import { Loader2 } from "lucide-react";
-import { delay } from "framer-motion";
+import { delay } from "motion/react";
 import Image from "next/image";
 import { toast } from "sonner";
 import axios from "axios";

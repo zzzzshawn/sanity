@@ -10,7 +10,7 @@ import {
   CardHeader,
   CardTitle,
 } from "../../../@/components/ui/card";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence } from "motion/react";
 import {
   fetchTournamentData,
   registerForTournament,
