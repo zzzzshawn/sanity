@@ -2,7 +2,6 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import * as z from "zod";
 import { signIn, useSession } from "next-auth/react";
 import {
   Form,
@@ -23,13 +22,11 @@ import {
   CardDescription,
   CardFooter,
   CardHeader,
-  CardTitle,
 } from "../../../@/components/ui/card";
-import { FaDiscord, FaGoogle } from "react-icons/fa";
+import { FaDiscord, FaGoogle, FaLinkedin } from "react-icons/fa";
 import { Loader2 } from "lucide-react";
 import Image from "next/image";
 import { toast } from "sonner";
-import axios from "axios";
 
 export default function SignInForm() {
   const router = useRouter();
@@ -70,8 +67,16 @@ export default function SignInForm() {
   };
 
   const handleDiscordSignIn = async () => {
-    await signIn("discord", { callbackUrl: "/dashboard" });
+    await signIn("discord", {
+      callbackUrl: "/dashboard",
+      redirect: process.env.DISCORD_REDIRECT_URL,
+    });
   };
+
+  const handleLinkedInSignIn = async () => {
+    await signIn("linkedin", { callbackUrl: "/dashboard" });
+  };
+
   const { data: session, status } = useSession();
 
   useEffect(() => {
@@ -151,7 +156,7 @@ export default function SignInForm() {
                     Sign In
                   </Button>
 
-                  <div className="my-5 flex items-center">
+                  <div className="my-2 flex items-center">
                     <div className="h-[1px] bg-zinc-400/20 w-1/2"></div>
                     <div className="mx-2 text-foreground/60 font-bold">or</div>
                     <div className="h-[1px] bg-zinc-400/20 w-1/2"></div>
@@ -159,21 +164,31 @@ export default function SignInForm() {
 
                   <div className="text-center flex items-center justify-center gap-2">
                     <Button
+                      type="button"
                       variant="default"
                       className="w-full flex gap-4"
                       onClick={handleGoogleSignIn}
                       arial-label="google-signin-btn"
                     >
-                      <FaGoogle className="h-4 w-4" />
+                      <FaGoogle className="h-5 w-5" />
                     </Button>
-
                     <Button
+                      type="button"
                       variant="default"
                       className="w-full flex gap-4"
                       onClick={handleDiscordSignIn}
                       arial-label="discord-signin-btn"
                     >
-                      <FaDiscord className="h-4 w-4" />
+                      <FaDiscord className="h-5 w-5" />
+                    </Button>
+                    <Button
+                      type="button"
+                      variant="default"
+                      className="w-full flex gap-4"
+                      onClick={handleLinkedInSignIn}
+                      arial-label="discord-signin-btn"
+                    >
+                      <FaLinkedin className="h-5 w-5" />
                     </Button>
                   </div>
                   <div className="mt-10 mb-5 text-foreground/80 text-xs text-center text-zinc-400">

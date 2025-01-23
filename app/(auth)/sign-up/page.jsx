@@ -2,9 +2,8 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import * as z from "zod";
 import Link from "next/link";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useDebounceCallback } from "usehooks-ts";
 import { Button } from "../../../@/components/ui/button";
 import { Input } from "../../../@/components/ui/input";
@@ -30,6 +29,8 @@ import { Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { signUpSchema } from "../../../model/Schema/signUpSchema";
 import Image from "next/image";
+import { signIn } from "next-auth/react";
+import { FaDiscord, FaGoogle, FaLinkedin } from "react-icons/fa";
 
 const Page = () => {
   const [username, setUsername] = useState("");
@@ -84,6 +85,21 @@ const Page = () => {
     } finally {
       setIsSubmitting(false);
     }
+  };
+
+  const handleGoogleSignUp = async () => {
+    await signIn("google", { callbackUrl: "/dashboard" });
+  };
+
+  const handleDiscordSignUp = async () => {
+    await signIn("discord", {
+      callbackUrl: "/dashboard",
+      redirect: process.env.DISCORD_REDIRECT_URL,
+    });
+  };
+
+  const handleLinkedInSignIn = async () => {
+    await signIn("linkedin", { callbackUrl: "/dashboard" });
   };
 
   return (
@@ -197,7 +213,43 @@ const Page = () => {
                       "Sign Up"
                     )}
                   </Button>
+                  <div className="my-1 flex items-center">
+                    <div className="h-[1px] bg-zinc-400/20 w-1/2"></div>
+                    <div className="mx-2 text-foreground/60 font-bold">or</div>
+                    <div className="h-[1px] bg-zinc-400/20 w-1/2"></div>
+                  </div>
 
+                  <div className="w-full">
+                    <div className="text-center flex items-center justify-center gap-2">
+                      <Button
+                        type="button"
+                        variant="default"
+                        className="w-full flex gap-4"
+                        onClick={handleGoogleSignUp}
+                        arial-label="google-signin-btn"
+                      >
+                        <FaGoogle className="h-5 w-5" />
+                      </Button>
+                      <Button
+                        type="button"
+                        variant="default"
+                        className="w-full flex gap-4"
+                        onClick={handleDiscordSignUp}
+                        arial-label="discord-signin-btn"
+                      >
+                        <FaDiscord className="h-5 w-5" />
+                      </Button>
+                      <Button
+                        type="button"
+                        variant="default"
+                        className="w-full flex gap-4"
+                        onClick={handleLinkedInSignIn}
+                        arial-label="discord-signin-btn"
+                      >
+                        <FaLinkedin className="h-5 w-5" />
+                      </Button>
+                    </div>
+                  </div>
                   <div className="mt-5 text-foreground/80 text-xs text-center text-zinc-400">
                     Already a member?{" "}
                     <Link
