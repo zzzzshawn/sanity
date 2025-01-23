@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import { Card, CardContent } from "./ui/card";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence } from "motion/react";
 import Pacman from "../app/loading";
 
 const TournamentBracket = ({ matches, roundNames }) => {

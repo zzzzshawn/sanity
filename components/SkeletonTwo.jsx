@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { useEffect, useState } from "react";
-import { motion } from "framer-motion";
+import { motion } from "motion/react";
 
 export const SkeletonTwo = () => {
   const images1 = [
@@ -17,7 +17,7 @@ export const SkeletonTwo = () => {
     // other images...
   ];
 
-  const [rotationValues, setRotationValues] = useState<number[]>([]);
+  const [rotationValues, setRotationValues] = useState([]);
 
   useEffect(() => {
     // Generate random rotation values on the client

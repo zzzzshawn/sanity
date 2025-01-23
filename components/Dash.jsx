@@ -6,7 +6,7 @@ import {
   useMotionTemplate,
   useScroll,
   useTransform,
-} from "framer-motion";
+} from "motion/react";
 import { FiMapPin } from "react-icons/fi";
 import { useRef } from "react";
 
